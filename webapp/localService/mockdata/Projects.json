@@ -1,0 +1,42 @@
+[
+  {
+	"ProjectName": "CMD",
+	"Type": "CDP",
+	"Methodology": "Scrum",
+	"Industry": "TM",
+	"ProjectManager": "Jojo Qu",
+	"Progress": "Sprint2"
+  },
+  {
+	"ProjectName": "CPR",
+	"Type": "RCS",
+	"Methodology": "Scrum",
+	"Industry": "TM",
+	"ProjectManager": "Pipi Tu",
+	"Progress": "Sprint0"
+  },
+  {
+	"ProjectName": "State Brid",
+	"Type": "CDP",
+	"Methodology": "Waterfall",
+	"Industry": "UCC",
+	"ProjectManager": "Susu Tang",
+	"Progress": "Realization"
+  },
+  {
+	"ProjectName": "YellowLand",
+	"Type": "CDP",
+	"Methodology": "Waterfall",
+	"Industry": "RE",
+	"ProjectManager": "Kaka Ku",
+	"Progress": "MIT"
+  },
+  {
+	"ProjectName": "MOL",
+	"Type": "CDP",
+	"Methodology": "Waterfall",
+	"Industry": "TM",
+	"ProjectManager": "Qiqi Bu",
+	"Progress": "Support"
+  }
+]

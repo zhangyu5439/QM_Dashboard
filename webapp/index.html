@@ -5,24 +5,25 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta charset="UTF-8">
 
-		<title>QM_Dashboard</title>
+		<title>QM Dashboard</title>
 
 		<script id="sap-ui-bootstrap"
-			src="../../resources/sap-ui-core.js"
+			src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
 			data-sap-ui-libs="sap.m"
 			data-sap-ui-theme="sap_bluecrystal"
 			data-sap-ui-compatVersion="edge"
-			data-sap-ui-resourceroots='{"QM_Dashboard": ""}'>
+			data-sap-ui-preload="async" 
+			data-sap-ui-resourceroots='{"QM_Dashboard": "./"}'>
 		</script>
 
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 
 		<script>
 			sap.ui.getCore().attachInit(function() {
-				new sap.m.Shell({
+			    new sap.m.Shell({
 					app: new sap.ui.core.ComponentContainer({
-						height : "100%",
-						name : "QM_Dashboard"
+					height : "100%",
+					name : "QM_Dashboard"
 					})
 				}).placeAt("content");
 			});

@@ -1,0 +1,31 @@
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+	<edmx:DataServices m:DataServiceVersion="1.0" m:MaxDataServiceVersion="3.0"
+					   xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+		<Schema Namespace="NorthwindModel" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityType Name="Project">
+				<Key>
+					<PropertyRef Name="ProjectName"/>
+					<PropertyRef Name="Type"/>
+				</Key>
+				<Property Name="ProjectName" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
+						  Unicode="true"/>
+				<Property Name="Type"        Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
+						  Unicode="true"/>
+				<Property Name="Methodology" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
+						  Unicode="true"/>
+				<Property Name="Industry"    Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
+						  Unicode="true"/>
+				<Property Name="Progress"    Type="Edm.String" Nullable="false" MaxLength="20" FixedLength="false"
+						  Unicode="true"/>
+	<!--			<Property Name="Quantity" Type="Edm.Int16" Nullable="false"/>
+				<Property Name="ExtendedPrice" Type="Edm.Decimal" Precision="19" Scale="4"/>-->
+			</EntityType>
+		</Schema>
+		<Schema Namespace="ODataWebV2.Northwind.Model" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityContainer Name="NorthwindEntities" m:IsDefaultEntityContainer="true" p6:LazyLoadingEnabled="true"
+							 xmlns:p6="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+				<EntitySet Name="Projects" EntityType="NorthwindModel.Project"/>
+			</EntityContainer>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

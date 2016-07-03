@@ -15,9 +15,17 @@
 		"sourceTemplate": {
 			"id": "ui5template.basicSAPUI5ApplicationProject",
 			"version": "1.32.0"
+		},
+		"dataSources": {
+			"projectRemote": {
+				"uri": "/destinations/northwind/V2/Northwind/Northwind.svc/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
 		}
 	},
-
 	"sap.ui": {
 		"_version": "1.1.0",
 		"technology": "UI5",
@@ -34,12 +42,8 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_bluecrystal"
-		]
+		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
 	},
-
 	"sap.ui5": {
 		"_version": "1.1.0",
 		"rootView": {
@@ -63,6 +67,35 @@
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
 					"bundleName": "QM_Dashboard.i18n.i18n"
+				}
+			},
+			"project": {
+				"dataSource": "projectRemote"
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "QM_Dashboard.view",
+				"controlId": "index",
+				"controlAggregation": "pages"
+			},
+			"routes": [{
+				"pattern": "",
+				"name": "projectOverview",
+				"target": "projectOverview"
+			}, {
+				"pattern": "projectDetail",
+				"name": "projectDetail",
+				"target": "projectDetail"
+			}],
+			"targets": {
+				"projectOverview": {
+					"viewName": "ProjectOverview"
+				},
+				"projectDetail": {
+					"viewName": "ProjectDetail"
 				}
 			}
 		},

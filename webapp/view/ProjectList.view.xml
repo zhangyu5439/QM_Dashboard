@@ -1,0 +1,25 @@
+<mvc:View controllerName="QM_Dashboard.controller.ProjectList" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+	<List id="projectList" headerText="{i18n>projectListTitle}" class="sapUiResponsiveMargin" width="auto"
+		items="{path:'project>/Projects', sorter : { path : 'Industry',
+				group : true }}">
+		<headerToolbar>
+			<Toolbar>
+				<Title text="{i18n>projectListTitle}"/>
+				<ToolbarSpacer/>
+				<SearchField width="50%" search="onFilterProjects" selectOnFocus="false"/>
+			</Toolbar>
+		</headerToolbar>
+		<items>
+			<ObjectListItem title="{project>ProjectName}"
+                    type="Navigation"
+					press="onPress">
+			    <attributes>
+			    	<ObjectAttribute text="{project>Type} - {project>Methodology}"/>
+			    </attributes>
+				<firstStatus>
+					<ObjectStatus text="{project>Progress}"/>
+				</firstStatus>
+			</ObjectListItem>
+		</items>
+	</List>
+</mvc:View>

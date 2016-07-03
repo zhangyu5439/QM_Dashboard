@@ -1,1 +1,4 @@
 /* Enter your custom styles here */
+.qmdbApp.myCustomText {
+  font-weight: bold;
+}
