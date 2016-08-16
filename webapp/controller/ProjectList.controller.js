@@ -34,7 +34,11 @@ sap.ui.define([
 		onPress: function (oEvent) {
 			var oItem = oEvent.getSource();
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("projectDetail");
+			oRouter.navTo("component",
+			{
+				projectPath: oItem.getBindingContext("project").getProperty("ProjectID").substr(1)
+			}
+			);
 		}
 
 	});

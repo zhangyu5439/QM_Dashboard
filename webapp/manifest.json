@@ -47,7 +47,6 @@
 	"sap.ui5": {
 		"_version": "1.1.0",
 		"rootView": {
-			"viewName": "QM_Dashboard.view.Index",
 			"type": "XML"
 		},
 		"dependencies": {
@@ -78,17 +77,53 @@
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
 				"viewPath": "QM_Dashboard.view",
-				"controlId": "index",
-				"controlAggregation": "pages"
+
+				"controlAggregation": "pages",
+				"clearTarget": "false"
 			},
 			"routes": [{
 				"pattern": "",
 				"name": "projectOverview",
-				"target": "projectOverview"
+				"view": "ProjectOverview",
+				"targetControl": "indexApp"
 			}, {
-				"pattern": "projectDetail",
-				"name": "projectDetail",
-				"target": "projectDetail"
+				"pattern": "split",
+				"name": "split",
+				"view": "Split",
+				"targetControl": "indexApp",
+				"subroutes": [{
+					"pattern": "project/{projectPath}",
+					"name": "component",
+					"view": "MasterComp",
+					"viewLevel": 1,
+					"targetAggregation": "masterPages",
+					"targetControl": "splitApp",
+					"subroutes": [{
+						"pattern": "component/{projectPath}",
+						"name": "actlist",
+						"view": "MasterAct",
+						"viewLevel": 2,
+						"targetAggregation": "masterPages",
+						"subroutes": [{
+							"pattern": "activity/{projectPath}",
+							"name": "activity",
+							"view": "DetailAct",
+							"viewLevel": 3,
+							"targetAggregation": "detailPages"
+						}]
+					}]
+				}]
+			}, {
+				"name": "notFoundMaster",
+				"view": "MasterComp",
+				"targetAggregation": "masterPages",
+				"targetContrl": "splitApp",
+				"subroutes": [{
+					"pattern": "{all*}",
+					"name": "notFound",
+					"view": "NotFound",
+					"targetAggregation": "detailPages"
+				}]
 			}],
 			"targets": {
 				"projectOverview": {

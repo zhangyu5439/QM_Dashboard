@@ -1,30 +1,106 @@
 <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
 	<edmx:DataServices m:DataServiceVersion="1.0" m:MaxDataServiceVersion="3.0"
-					   xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+					   xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
 		<Schema Namespace="NorthwindModel" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
 			<EntityType Name="Project">
 				<Key>
-					<PropertyRef Name="ProjectName"/>
-					<PropertyRef Name="Type"/>
+					<PropertyRef Name="ProjectID"/>
 				</Key>
-				<Property Name="ProjectName" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
-						  Unicode="true"/>
-				<Property Name="Type"        Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
-						  Unicode="true"/>
-				<Property Name="Methodology" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
-						  Unicode="true"/>
-				<Property Name="Industry"    Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"
-						  Unicode="true"/>
-				<Property Name="Progress"    Type="Edm.String" Nullable="false" MaxLength="20" FixedLength="false"
-						  Unicode="true"/>
+				<Property Name="ProjectID"   Type="Edm.String" Nullable="false" MaxLength="10" FixedLength="false"  Unicode="true"/>
+				<Property Name="ProjectName" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"  Unicode="true"/>
+				<Property Name="Type"        Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"  Unicode="true"/>
+				<Property Name="Methodology" Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"  Unicode="true"/>
+				<Property Name="Industry"    Type="Edm.String" Nullable="false" MaxLength="40" FixedLength="false"  Unicode="true"/>
+				<Property Name="Phase"       Type="Edm.String" Nullable="false" MaxLength="10" FixedLength="false"   Unicode="true"/>
+				<Property Name="Progress"    Type="Edm.String" Nullable="Ture"  MaxLength="10" FixedLength="false"   Unicode="true"/>
 	<!--			<Property Name="Quantity" Type="Edm.Int16" Nullable="false"/>
 				<Property Name="ExtendedPrice" Type="Edm.Decimal" Precision="19" Scale="4"/>-->
 			</EntityType>
+			<EntityType Name="ProjectComponent">
+				<Key>
+					<PropertyRef Name="ProjectID"/>
+					<PropertyRef Name="Phase"/>
+					<PropertyRef Name="Progress"/>
+					<PropertyRef Name="ProjComTyp"/>
+				</Key>
+				<Property Name="ProjectID"    Type="Edm.String" Nullable="false" MaxLength="10" FixedLength="false"  Unicode="true"/>
+				<Property Name="Phase"       Type="Edm.String" Nullable="false" MaxLength="10" FixedLength="false"   Unicode="true"/>
+				<Property Name="Progress"    Type="Edm.String" Nullable="Ture"  MaxLength="10" FixedLength="false"   Unicode="true"/>
+				<Property Name="ProjCompTyp"  Type="Edm.String" Nullable="false" MaxLength="4"  FixedLength="false"  Unicode="true"/>
+			</EntityType>
+			<EntityType Name="ProjectActivity">
+				<Key>
+					<PropertyRef Name="ProjectID"/>
+					<PropertyRef Name="Phase"/>
+					<PropertyRef Name="Progress"/>
+					<PropertyRef Name="ProjComTyp"/>
+					<PropertyRef Name="ProjActTyp"/>
+				</Key>
+				<Property Name="ProjectID"    Type="Edm.String" Nullable="false" MaxLength="10"  FixedLength="false"  Unicode="true"/>
+				<Property Name="Phase"        Type="Edm.String" Nullable="false" MaxLength="10" FixedLength="false"   Unicode="true"/>
+				<Property Name="Progress"     Type="Edm.String" Nullable="Ture"  MaxLength="10" FixedLength="false"   Unicode="true"/>
+				<Property Name="ProjCompTyp"  Type="Edm.String" Nullable="false" MaxLength="4"   FixedLength="false"  Unicode="true"/>
+				<Property Name="ProjActTyp"   Type="Edm.String" Nullable="false" MaxLength="4"   FixedLength="false"  Unicode="true"/>
+				<Property Name="DueDate"      Type="Edm.Date"   Nullable="false" Unicode="true"/>
+				<Property Name="ProjProgress" Type="Edm.String" Nullable="false" MaxLength="20"  FixedLength="false"  Unicode="true"/>
+		    	<Property Name="ActStatus"    Type="Edm.String" Nullable="false" MaxLength="1"   FixedLength="false"  Unicode="true"/>
+		    	<Property Name="Team"         Type="Edm.String" Nullable="false" MaxLength="20"  FixedLength="false"  Unicode="true"/>
+		    	<Property Name="Link"         Type="Edm.String" Nullable="false" MaxLength="200"  FixedLength="false"  Unicode="true"/>
+		    	<Property Name="Comment"      Type="Edm.String" Nullable="false" MaxLength="200"  FixedLength="false"  Unicode="true"/>
+		    	<Property Name="Severity1"    Type="Edm.Int32" Nullable="false" MaxLength="5"  FixedLength="false"  Unicode="true"/>
+		    	<Property Name="Severity2"    Type="Edm.Int32" Nullable="false" MaxLength="5"  FixedLength="false"  Unicode="true"/>
+		    	<Property Name="Severity3"    Type="Edm.Int32" Nullable="false" MaxLength="5"  FixedLength="false"  Unicode="true"/>
+		    	
+			</EntityType>			
+			<Association Name="Project_Components" sap:content-version="1" sap:label="Association: Project --&gt; Project Component">
+				<End Type="NorthwindModel.Project" Multiplicity="1" Role="FromRole_Project_Components"/>
+				<End Type="NorthwindModel.ProjectComponent" Multiplicity="*" Role="ToRole_Project_Components"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_Project_Components">
+						<PropertyRef Name="ProjectID"/>
+<!--						<PropertyRef Name="Phase"/>
+						<PropertyRef Name="Progress"/>-->
+					</Principal>
+					<Dependent Role="ToRole_Project_Components">
+						<PropertyRef Name="ProjectID"/>
+<!--						<PropertyRef Name="Phase"/>
+						<PropertyRef Name="Progress"/>-->
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="ProjCompProjActivities" sap:content-version="1" sap:label="Association: Project Component --&gt; Project Actvities">
+				<End Type="NorthwindModel.ProjectComponent" Multiplicity="1" Role="FromRole_ProjCompProjActivities"/>
+				<End Type="NorthwindModel.ProjectActivity" Multiplicity="*" Role="ToRole_ProjCompProjActivities"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_ProjCompProjActivities">
+						<PropertyRef Name="ProjectID"/>
+						<PropertyRef Name="Phase"/>
+						<PropertyRef Name="Progress"/>
+						<PropertyRef Name="ProjCompTyp"/>
+					</Principal>
+					<Dependent Role="ToRole_ProjCompProjActivities">
+						<PropertyRef Name="ProjectID"/>
+						<PropertyRef Name="Phase"/>
+						<PropertyRef Name="Progress"/>
+						<PropertyRef Name="ProjCompTyp"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
 		</Schema>
 		<Schema Namespace="ODataWebV2.Northwind.Model" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
 			<EntityContainer Name="NorthwindEntities" m:IsDefaultEntityContainer="true" p6:LazyLoadingEnabled="true"
 							 xmlns:p6="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
 				<EntitySet Name="Projects" EntityType="NorthwindModel.Project"/>
+				<EntitySet Name="ProjectComponents" EntityType="NorthwindModel.ProjectComponent" sap:label="Project Components" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+				<EntitySet Name="ProjectActivities" EntityType="NorthwindModel.ProjectActivity"  sap:label="Project Activities" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+				<AssociationSet Name="Project_Components_AssocSet" Association="NorthwindModel.Project_Components" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+					<End EntitySet="Projects" Role="FromRole_Project_Components"/>
+					<End EntitySet="ProjectComponents" Role="ToRole_Project_Components"/>
+				</AssociationSet>
+				<AssociationSet Name="ProjCompProjActivities_AssocSet" Association="NorthwindModel.ProjCompProjActivities" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+					<End EntitySet="ProjectComponents" Role="FromRole_ProjCompProjActivities"/>
+					<End EntitySet="ProjectActivities" Role="ToRole_ProjCompProjActivities"/>
+				</AssociationSet>
 			</EntityContainer>
 		</Schema>
 	</edmx:DataServices>

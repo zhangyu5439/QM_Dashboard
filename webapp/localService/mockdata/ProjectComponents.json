@@ -1,0 +1,26 @@
+[
+  {
+  	"ProjectID": "0000010001",
+	"Phase": "Realization",
+	"Progress": "Sprint2",
+	"ProjCompTyp": "REV"
+  },
+  {
+  	"ProjectID": "0000010001",
+	"Phase": "Realization",
+	"Progress": "Sprint2",
+	"ProjCompTyp": "CODE"
+  },
+  {
+   	"ProjectID": "0000010002",
+	"Phase": "Specification",
+	"Progress": "Sprint0",
+	"ProjCompTyp": "CODE"
+  },
+  {
+   	"ProjectID": "0000010002",
+	"Phase": "Specification",
+	"Progress": "Sprint0",
+	"ProjCompTyp": "TEST"
+  }
+]

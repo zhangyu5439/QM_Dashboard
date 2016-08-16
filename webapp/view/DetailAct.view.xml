@@ -1,0 +1,185 @@
+<mvc:View controllerName="QM_Dashboard.controller.DetailAct" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:form="sap.ui.layout.form" xmlns:footerbar="sap.ushell.ui.footerbar">
+	<Page title="{i18n>detailPageTitle}" showNavButton="true" navButtonPress="onNavBack">
+		<content>
+			<!--Header information supplier name, total value with currency code, change date and requester of the selected purchase order -->
+			<ObjectHeader id="objectHeader" title="{project>ProjectID}" responsive="true" intro="{project>Progress}">
+				<statuses>
+					<ObjectStatus id="id1" text="{project>ProjCompTyp}"/>
+				</statuses>
+			</ObjectHeader>
+			<!--Allow adding fields after the object header -->
+			<core:ExtensionPoint name="extensionAfterObjectHeader"/>
+			<IconTabBar select="onDetailSelect" id="idIconTabBar">
+				<items>
+					<IconTabFilter key="general" text="{i18n>iconTabGeneral}" icon="sap-icon://hint">
+						<content>
+							<core:Fragment fragmentName="QM_Dashboard.view.GeneralForm" type="XML"/>
+						</content>
+					</IconTabFilter>
+					<IconTabFilter key="upload" text="{i18n>iconTabUpload}" icon="sap-icon://upload">
+						<content>
+							<core:Fragment fragmentName="QM_Dashboard.view.GeneralForm" type="XML"/>
+						</content>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+			<!--Filter Criteria-->
+			<form:SimpleForm title="Filter" minWidth="1024" maxContainerCols="2" class="sapUiForceWidthAuto sapUiResponsiveMargin" labelSpanL="3"
+				labelSpanM="3" columnsL="3">
+				<Label text="Phase - Sprint"/>
+				<ComboBox id='cbPhase' items="{path: 'project>/ProjectActivities', sorter:{path: 'project>Phase'}}">
+					<core:Item key='{project>Phase}' text='{project>Phase}'/>
+				</ComboBox>
+				<ComboBox id='cbProgress' items="{path: 'project>/ProjectActivities', sorter:{path: 'project>ProjProgress'}}">
+					<core:Item key='{project>ProjProgress}' text='{project>ProjProgress}'/>
+				</ComboBox>
+				<Label text="Category"/>
+				<ComboBox id='cbActCat' items="{path: 'project>/ProjectActivities', sorter:{path: 'project>ProjActCat'}}">
+					<core:Item key='{project>ProjActCat}' text='{project>ProjActCat}'/>
+				</ComboBox>
+				<Label text="Team"/>
+				<ComboBox id='cbTeam' items="{path: 'project>/ProjectActivities', sorter:{path: 'project>Team'}}">
+					<core:Item key='{project>Team}' text='{project>Team}'/>
+				</ComboBox>
+			</form:SimpleForm>
+			<!--Allow adding fields after the form -->
+			<core:ExtensionPoint name="extensionAfterForm"/>
+			<!--Summary information-->
+			<Table id="tabSummary" headerText="Summary" updateFinished="onUpdateFinished1" class="sapUiResponsiveMargin" width="auto"
+				items="{path: 'project>/ProjectActivities', parameters: {select: 'Phase,ProjProgress,DueDate,ActStatus'}}">
+				<columns>
+					<!--Phase-->
+					<Column id="colPhase" width="30%">
+						<header>
+							<Label id="colblPhase" text="Phase" visible="{= !${device>/system/phone} }"/>
+						</header>
+					</Column>
+					<!--Act Type-->
+					<Column id="colActCat" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="15%">
+						<header>
+							<Label id="colblActTyp" text="Activity Category"/>
+						</header>
+					</Column>
+					<!--End Date-->
+					<Column id="colDueDate" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="15%">
+						<header>
+							<Label id="colblDueDate" text="Due Date"/>
+						</header>
+					</Column>
+					<!--Status-->
+					<Column id="colStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="15%">
+						<header>
+							<Label id="colblStatus" text="Status"/>
+						</header>
+					</Column>
+				</columns>
+				<ColumnListItem id="cliSummary">
+					<cells>
+						<!--Phase-->
+						<Text id="cellTitle" text="{project>Phase} - {project>ProjProgress}" class="sapMTableContentMargin"/>
+						<!--Activity Category-->
+						<Text id="cellActCat" text="Done Criteria" class="sapMTableContentMargin"/>
+						<!--Due Date-->
+						<DatePicker id="cellDueDate" value="{project>DueDate}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"/>
+						<!--Status-->
+						<Text id="cellStatus" text="{project>ActStatus}" class="sapMTableContentMargin"/>
+					</cells>
+				</ColumnListItem>
+			</Table>
+			<!--Item list-->
+			<Table id="tabItems" headerText="{path:'viewProperties>/itemListCount', formatter: '.formatter.itemListTitle' }"
+				updateFinished="onUpdateFinished" class="sapUiResponsiveMargin" width="auto"
+				items="{path: 'project>/ProjectActivities', parameters: {select: 'Team,ActStatus,Link,Comment,Severity1,Severity2,Severity3'}}">
+				<columns>
+					<!--Team name-->
+					<Column id="colTeam" width="12%">
+						<header>
+							<Label id="colblTeam" text="Team" visible="{= !${device>/system/phone} }"/>
+						</header>
+					</Column>
+					<!--Activity Status-->
+					<Column id="colActStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="15%">
+						<header>
+							<Label id="colblActStatus" text="Activity Status"/>
+						</header>
+					</Column>
+					<!--Link-->
+					<Column id="colLink" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="25%">
+						<header>
+							<Label id="colblLink" text="Link"/>
+						</header>
+					</Column>
+					<!--Comment-->
+					<Column id="colComment" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline">
+						<header>
+							<Label id="colblComment" text="Comment"/>
+						</header>
+					</Column>
+					<!--Severity 1-->
+					<Column id="colS1" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" hAlign="Right" width="8%">
+						<header>
+							<Label id="colblS1" text="Severity 1"/>
+						</header>
+					</Column>
+					<!--Severity 2-->
+					<Column id="colS2" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" hAlign="Right" width="8%">
+						<header>
+							<Label id="colblS2" text="Severity 2"/>
+						</header>
+					</Column>
+					<!--Severity 3-->
+					<Column id="colS3" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" hAlign="Right" width="8%">
+						<header>
+							<Label id="colblS3" text="Severity 3"/>
+						</header>
+					</Column>
+				</columns>
+				<ColumnListItem id="detailsListItem">
+					<cells>
+						<!--Team name-->
+						<Text id="cellTeamName" text="{project>Team}" class="sapMTableContentMargin"/>
+						<!--Due Date-->
+						<!--						<Text id="cellActStatus" text="{project>ActStatus}" class="sapMTableContentMargin"/>-->
+						<ComboBox id='cellActStatus' items="{path: 'project>/ProjectActivities', sorter:{path: 'project>ActStatus'}}" editable="{appProperties>/editMode}">
+							<core:Item key='{project>ActStatus}' text='{project>ActStatus}'/>
+						</ComboBox>
+						<!--Link-->
+						<Input id="cellLink" value="{project>Link}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"/>
+						<!--Comment-->
+						<TextArea id="cellComment" value="{project>Comment}" class="sapMTableContentMargin" wrapping="Soft" editable="{appProperties>/editMode}"/>
+						<!--Severity 1-->
+						<Input id="cellS1" value="{project>Severity1}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"/>
+						<!--Severity 1-->
+						<Input id="cellS2" value="{project>Severity2}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"/>
+						<!--Severity 1-->
+						<Input id="cellS3" value="{project>Severity3}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"/>
+					</cells>
+				</ColumnListItem>
+			</Table>
+		</content>
+		
+		<!--Footer bar with "Save" and "Edit" button and a button for opening an action sheet containing the standard "AddBookmark" button-->
+		<footer>
+			<OverflowToolbar id="footerToolbar">
+				<ToolbarSpacer id="footerToolbarSpacer"/>
+				<Button id="btnSave"  icon="sap-icon://save" tooltip="Save" press="onSaveButtonPressed" enabled="{appProperties>/editMode}"/>
+				<Button id="btnEdit"  icon="sap-icon://edit" tooltip="Edit" press="onEditButtonPressed" enabled="{= ${appProperties>/editMode} ? false:true}"/>
+				<Button id="btnCancel"  icon="sap-icon://cancel" tooltip="Cancel" press="onCancelButtonPressed" enabled="{appProperties>/editMode}"/>
+				<Button id="btnShare" icon="sap-icon://action"  tooltip="Share" press="onShareButtonPressed">
+					<dependents>
+						<ActionSheet id="asShare" showCancelButton="true" placement="Top">
+							<buttons>
+								<Button id="btnSendEmail" icon="sap-icon://email" text="Send Email" press="onSendEmailPressed"/>
+								<footerbar:AddBookmarkButton id ="btnShareTile" appData="{
+									path: 'viewProperties>/saveAsTileTitle',
+									formatter: '.formatter.appDataForTile'
+								}"/>
+							</buttons>
+						</ActionSheet>
+					</dependents>
+				</Button>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

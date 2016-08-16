@@ -23,12 +23,34 @@ sap.ui.define([
 			UIComponent.prototype.init.apply(this, arguments);
 			// set i18n model
 
-
+        // set device model - for responsiveness that is not part of the controls
+        // (some is implicit, this is for the explicit part)
+        var odeviceModel = new sap.ui.model.json.JSONModel({
+            isTouch : sap.ui.Device.support.touch,
+            isNoTouch : !sap.ui.Device.support.touch,
+            isPhone : sap.ui.Device.system.phone,
+            isNoPhone : !sap.ui.Device.system.phone,
+            listMode : sap.ui.Device.system.phone ? "None" : "SingleSelectMaster",
+            listItemType : sap.ui.Device.system.phone ? "Active" : "Inactive"
+        });
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
+			//this.setModel(odeviceModel, "device");
 
 			// create the views based on the url/hash
 			this.getRouter().initialize();
+
+		},
+		
+		createContent: function() {
+			var oViewData = {
+				component: this
+			};
+			return sap.ui.view({
+				viewName: "QM_Dashboard.view.Index",
+				type: sap.ui.core.mvc.ViewType.XML,
+				viewData: oViewData
+			});
 		}
 	});
 

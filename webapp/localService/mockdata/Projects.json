@@ -1,42 +1,52 @@
 [
   {
+  	"ProjectID": "0000010001",
 	"ProjectName": "CMD",
 	"Type": "CDP",
 	"Methodology": "Scrum",
 	"Industry": "TM",
 	"ProjectManager": "Jojo Qu",
+	"Phase": "Realization",
 	"Progress": "Sprint2"
   },
   {
+  	"ProjectID": "0000010002",
 	"ProjectName": "CPR",
 	"Type": "RCS",
 	"Methodology": "Scrum",
 	"Industry": "TM",
 	"ProjectManager": "Pipi Tu",
+	"Phase": "Specification",
 	"Progress": "Sprint0"
   },
   {
+   	"ProjectID": "0000010003",
 	"ProjectName": "State Brid",
 	"Type": "CDP",
 	"Methodology": "Waterfall",
 	"Industry": "UCC",
 	"ProjectManager": "Susu Tang",
+	"Phase": "Realization",
 	"Progress": "Realization"
   },
   {
+   	"ProjectID": "0000010005",
 	"ProjectName": "YellowLand",
 	"Type": "CDP",
 	"Methodology": "Waterfall",
 	"Industry": "RE",
 	"ProjectManager": "Kaka Ku",
+	"Phase": "Realization",
 	"Progress": "MIT"
   },
   {
+  	"ProjectID": "0000010006",
 	"ProjectName": "MOL",
 	"Type": "CDP",
 	"Methodology": "Waterfall",
 	"Industry": "TM",
 	"ProjectManager": "Qiqi Bu",
+	"Phase": "Support",
 	"Progress": "Support"
   }
 ]
