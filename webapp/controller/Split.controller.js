@@ -14,6 +14,7 @@ sap.ui.define([
 			var oAppModel = new JSONModel({
 				appControl: this.getAppControl(),
 				currProjectID: "",
+				selComp:{compType:"",phase:"",progress:""},
 				//selected****: [],
 				editMode: false,
 				emptyPageText: "",

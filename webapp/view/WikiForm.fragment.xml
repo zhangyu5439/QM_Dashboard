@@ -12,7 +12,7 @@
 				maxContainerCols="2"
 				editable="false"
 				layout="ResponsiveGridLayout"
-				title="{i18n>categoryInfo}"
+				title="{i18n>wikiInfo}"
 				labelSpanL="3"
 				labelSpanM="3"
 				emptySpanL="4"
@@ -20,10 +20,10 @@
 				columnsL="1"
 				columnsM="1">
 				<f:content>
-					<Label text="{i18n>projectType}" />
-					<Text  text="{qmdModel>type}" />
-					<Label text="{i18n>methodology}" />
-					<Text text="{qmdModel>methodology}" />
+					<Label text="{i18n>wikiLink}" />
+					<Link href="{detModel>wiki}" text="Wiki Link" />
+					<Label text="{i18n>actExplaination}" />
+					<Text text="{detModel>explaination}" />
 				</f:content>
 			</f:SimpleForm>
 		</l:content>

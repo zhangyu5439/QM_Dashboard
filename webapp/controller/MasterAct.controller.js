@@ -1,6 +1,9 @@
 sap.ui.define([
-	"./BaseController"
-], function(BaseController) {
+	"./BaseController",
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator",
+], function(BaseController, JSONModel, Filter, FilterOperator) {
 	"use strict";
 
 	return BaseController.extend("QM_Dashboard.controller.MasterAct", {
@@ -18,36 +21,76 @@ sap.ui.define([
 		},
 
 		onRouteMatched: function(oEvent) {
-			var oList = this.getView().byId("list");
-			var sName = oEvent.getParameter("name");
-			var oArguments = oEvent.getParameter("arguments");
-			var sProjectPath = "/" + oArguments.projectPath;
-			this.getView().bindElement({
-				path: sProjectPath
-			});
 
-			// Wait for the list to be loaded once
-			jQuery.when(this.oUpdateFinishedDeferred).then(jQuery.proxy(function() {
-				var aItems;
+			if (oEvent.getParameter("name") === "actlist") {
+				var oList = this.getView().byId("list");
+			    var sName = oEvent.getParameter("name");
+				var oArguments = oEvent.getParameter("arguments");
+				if (oArguments.compType) {
+					var sCompType = oArguments.compType;
+					var sPhase = oArguments.phase;
+					var sProgress = oArguments.progress;
+					var sProjectID = this.getModel("appProperties").getProperty("currProjectID");
+					sProjectID = "0000000001";
 
-				// On the empty hash select the first item
-				if (sName === "actlist") {
-					this.selectDetail();
-				}
+					// build filter array
+					var aFilter = new Array();
+					this.getModel("appProperties").setProperty("/selComp/compType", sCompType);
+					this.getModel("appProperties").setProperty("/selComp/phase", sPhase);
+					this.getModel("appProperties").setProperty("/selComp/progress", sProgress);
 
-				// Try to select the item in the list
-				if (sName === "activity") {
+					aFilter.push(new Filter("project_id", FilterOperator.EQ, sProjectID));
+					aFilter.push(new Filter("comp_type", FilterOperator.EQ, sCompType));
+					//aFilter.push(new Filter("phase", FilterOperator.EQ, sPhase));
+					//aFilter.push(new Filter("progress", FilterOperator.EQ, sProgress));
 
-					aItems = oList.getItems();
-					for (var i = 0; i < aItems.length; i++) {
-						if (aItems[i].getBindingContext("project").getPath() === "/" + oArguments.projectPath) {
-							oList.setSelectedItem(aItems[i], true);
-							break;
+					var oModel = new sap.ui.model.odata.ODataModel("/destinations/qmd/", false);
+					var oJsonModel = new JSONModel();
+					var sComponentPath = "/activities";
+
+					oModel.read(sComponentPath, null, ["$filter=project_id eq '" + sProjectID + "' and comp_type eq '" + sCompType + "'"], false,
+						function(
+							oData, oResponse) {
+							console.log("Read successfully - oData ");
+							oJsonModel.setData({
+								activities: oData.results
+							});
+
+						},
+						function() {
+							console.log("Read failed");
+						});
+
+					this.getView().setModel(oJsonModel, "actModel");
+
+					//	this.getView().bindElement({
+					//path: sProjectPath
+					//	});
+
+					// Wait for the list to be loaded once
+					jQuery.when(this.oUpdateFinishedDeferred).then(jQuery.proxy(function() {
+						var aItems;
+
+						// On the empty hash select the first item
+						if (sName === "actlist") {
+							//this.selectDetail();
 						}
-					}
-				}
 
-			}, this));
+						// Try to select the item in the list
+						if (sName === "activity") {
+
+							aItems = oList.getItems();
+							for (var i = 0; i < aItems.length; i++) {
+								if (aItems[i].getBindingContext("project").getPath() === "/" + oArguments.projectPath) {
+									oList.setSelectedItem(aItems[i], true);
+									break;
+								}
+							}
+						}
+
+					}, this));
+				}
+			}
 		},
 
 		//Select first item as default
@@ -87,11 +130,10 @@ sap.ui.define([
 		showDetail: function(oItem) {
 			// If we're on a phone, include nav in history; if not, don't.
 			//	var bReplace = jQuery.device.is.phone ? false : true;
+			var oContext = oItem.getBindingContext("actModel");
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("activity", {
 				from: "actlist",
-				projectPath: oItem.getBindingContextPath().substr(1)
-					//oItem.getProperty("title")
-					//tab: "supplier"
+				actType: oContext.getProperty("act_type")
 			});
 		}
 

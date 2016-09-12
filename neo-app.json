@@ -44,6 +44,14 @@
 			"name": "northwind"
 		},
 		"description": "Northwind OData Service"
+	},
+	{
+		"path": "/destinations/qmd",
+		"target": {
+			"type": "destination",
+			"name": "qmd"
+		},
+		"description": "QMD OData Service"
 	}
   ],
   "sendWelcomeFileRedirect": true

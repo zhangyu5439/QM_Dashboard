@@ -12,7 +12,7 @@
 				maxContainerCols="2"
 				editable="false"
 				layout="ResponsiveGridLayout"
-				title="{i18n>categoryInfo}"
+				title="{i18n>contactInfo}"
 				labelSpanL="3"
 				labelSpanM="3"
 				emptySpanL="4"
@@ -20,10 +20,12 @@
 				columnsL="1"
 				columnsM="1">
 				<f:content>
-					<Label text="{i18n>projectType}" />
-					<Text  text="{qmdModel>type}" />
-					<Label text="{i18n>methodology}" />
-					<Text text="{qmdModel>methodology}" />
+					<Label text="{i18n>pm}" />
+					<Text text="{qmdModel>resp_person.proj_mgr}" />
+					<Label text="{i18n>qm}" />
+					<Text text="{qmdModel>resp_person.qm_mgr1}" />
+					<Label text="{i18n>qm}" />
+					<Text text="{qmdModel>resp_person.qm_mgr2}" />
 				</f:content>
 			</f:SimpleForm>
 		</l:content>

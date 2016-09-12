@@ -1,7 +1,199 @@
-<mvc:View controllerName="QM_Dashboard.controller.ProjectList" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="QM_Dashboard.controller.ProjectList" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:mchart="sap.suite.ui.microchart" xmlns:suite="sap.suite.ui.commons">
+	<ObjectHeader id="ohOverview" responsive="true" binding="{qmdModel>/projects('0000000001')}"
+		intro="{qmdModel>industry} - {qmdModel>type} - {qmdModel>methodology}" title="{qmdModel>name}" showMarkers="false" markFlagged="true"
+		markFavorite="false" backgroundDesign="Translucent">
+		<!--		<attributes>
+			<ObjectAttribute title="" text=""/>
+		</attributes>-->
+		<!--		<statuses>
+			<ObjectStatus title="Status" text="In Progress" state="Warning" />
+		</statuses>-->
+		<headerContainer class="sapUiResponsiveMargin" width="auto">
+			<suite:HeaderContainer scrollStep="200" scrollTime="500">
+				<suite:items>
+					<!--Progress-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:DeltaMicroChart size="S" value1="28" value2="20" title1="May 14" title2="Apr 2014" displayValue1="28 Day" displayValue2="20 Day"
+										deltaDisplayValue="8 Day" color="Good"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="{qmdModel>curr_phase} - {qmdModel>curr_progress}"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--PBI Review-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" value="3" icon="sap-icon://inspection"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="PBI Review"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--HLD-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" value="9" icon="sap-icon://document"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="High Level Design"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--Code Review-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" value="7" icon="sap-icon://attachment-html"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="Code Review"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--ATC Check-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:ComparisonChart size="S">
+										<suite:data>
+											<suite:ComparisonData title="P1" value="10" color="Error"/>
+											<suite:ComparisonData title="P2" value="20" color="Critical"/>
+											<suite:ComparisonData title="P3" value="30" color="Good"/>
+										</suite:data>
+									</suite:ComparisonChart>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="ATC"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--ATC, Current-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" scale="PC" value="18" valueColor="Error" indicator="Up"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="ATC, Current"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--Message-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:ComparisonChart size="S">
+										<suite:data>
+											<suite:ComparisonData title="High" value="3" color="Error"/>
+											<suite:ComparisonData title="Medium" value="10" color="Critical"/>
+											<suite:ComparisonData title="Low" value="8" color="Good"/>
+										</suite:data>
+									</suite:ComparisonChart>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="FIT Messages"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--Message, Current-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" scale="PC" value="4" valueColor="Good" indicator="Down"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="FIT Messages, Current"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--Test Coverage-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:BulletChart size="S" scale="%" targetValue="100" minValue="0" maxValue="100">
+										<suite:actual>
+											<suite:BulletChartData value="75" color="Critical"/>
+										</suite:actual>
+										<suite:thresholds>
+											<suite:BulletChartData value="50" color="Error"/>
+											<suite:BulletChartData value="60" color="Critical"/>
+											<suite:BulletChartData value="90" color="Good"/>
+										</suite:thresholds>
+									</suite:BulletChart>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="Test Coverage"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+				</suite:items>
+			</suite:HeaderContainer>
+		</headerContainer>
+	</ObjectHeader>
+	<!--Project Lists-->
 	<List id="projectList" headerText="{i18n>projectListTitle}" class="sapUiResponsiveMargin" width="auto"
-		items="{path:'project>/Projects', sorter : { path : 'Industry',
-				group : true }}">
+		items="{path:'qmdModel>/projects', sorter : { path : 'industry', group : true }}">
 		<headerToolbar>
 			<Toolbar>
 				<Title text="{i18n>projectListTitle}"/>
@@ -10,14 +202,12 @@
 			</Toolbar>
 		</headerToolbar>
 		<items>
-			<ObjectListItem title="{project>ProjectName}"
-                    type="Navigation"
-					press="onPress">
-			    <attributes>
-			    	<ObjectAttribute text="{project>Type} - {project>Methodology}"/>
-			    </attributes>
+			<ObjectListItem title="{qmdModel>name}" type="Navigation" press="onPress">
+				<attributes>
+					<ObjectAttribute text="{qmdModel>type} - {qmdModel>methodology}"/>
+				</attributes>
 				<firstStatus>
-					<ObjectStatus text="{project>Progress}"/>
+					<ObjectStatus text="{qmdModel>curr_progress}"/>
 				</firstStatus>
 			</ObjectListItem>
 		</items>

@@ -1,12 +1,12 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
+	"./BaseController",
 	"sap/ui/model/json/JSONModel",
 	"QM_Dashboard/model/formatter",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator"
-], function(Controller, JSONModel, formatter, Filter, FilterOperator) {
+], function(BaseController, JSONModel, formatter, Filter, FilterOperator) {
 	"use strict";
-	return Controller.extend("QM_Dashboard.controller.ProjectList", {
+	return BaseController.extend("QM_Dashboard.controller.ProjectList", {
 		formatter: formatter,
 		onInit: function() {
 			var oViewModel = new JSONModel({
@@ -21,7 +21,7 @@ sap.ui.define([
 			var aFilter = [];
 			var sQuery = oEvent.getParameter("query");
 			if (sQuery) {
-				aFilter.push(new Filter("ProjectName", FilterOperator.Contains, sQuery));
+				aFilter.push(new Filter("name", FilterOperator.Contains, sQuery));
 			}
 
 			// filter binding
@@ -36,7 +36,7 @@ sap.ui.define([
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("component",
 			{
-				projectPath: oItem.getBindingContext("project").getProperty("ProjectID").substr(1)
+				projectPath: oItem.getBindingContext("qmdModel").getProperty("project_id") 
 			}
 			);
 		}

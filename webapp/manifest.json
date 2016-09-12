@@ -17,8 +17,8 @@
 			"version": "1.32.0"
 		},
 		"dataSources": {
-			"projectRemote": {
-				"uri": "/destinations/northwind/V2/Northwind/Northwind.svc/",
+			"qmdRemote": {
+				"uri": "/destinations/qmd",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0"
@@ -30,7 +30,7 @@
 		"_version": "1.1.0",
 		"technology": "UI5",
 		"icons": {
-			"icon": "",
+			"icon": "sap-icon://bbyd-dashboard",
 			"favIcon": "",
 			"phone": "",
 			"phone@2": "",
@@ -54,7 +54,8 @@
 			"libs": {
 				"sap.ui.core": {},
 				"sap.m": {},
-				"sap.ui.layout": {}
+				"sap.ui.layout": {},
+				"sap.ushell":{}
 			}
 		},
 		"contentDensities": {
@@ -68,8 +69,8 @@
 					"bundleName": "QM_Dashboard.i18n.i18n"
 				}
 			},
-			"project": {
-				"dataSource": "projectRemote"
+			"qmdModel": {
+				"dataSource": "qmdRemote"
 			}
 		},
 		"routing": {
@@ -99,13 +100,13 @@
 					"targetAggregation": "masterPages",
 					"targetControl": "splitApp",
 					"subroutes": [{
-						"pattern": "component/{projectPath}",
+						"pattern": "component/{compType}/phase/{phase}/progress/{progress}",
 						"name": "actlist",
 						"view": "MasterAct",
 						"viewLevel": 2,
 						"targetAggregation": "masterPages",
 						"subroutes": [{
-							"pattern": "activity/{projectPath}",
+							"pattern": "activity/{actType}",
 							"name": "activity",
 							"view": "DetailAct",
 							"viewLevel": 3,

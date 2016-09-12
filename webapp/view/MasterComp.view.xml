@@ -1,23 +1,18 @@
 <mvc:View controllerName="QM_Dashboard.controller.MasterComp" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
 	<Page id="page" title="{i18n>masterCompTitle}">
-		<!--		<subHeader>
+		<subHeader>
 			<Bar id="searchBar">
 				<contentMiddle>
-					<SearchField
-						id="searchField"
-						showRefreshButton="{device>/isNoTouch}"
-						search="onSearch"
-						tooltip="{i18n>masterSearchTooltip}"
-						width="100%">
-					</SearchField>
+					<SearchField id="searchField" showRefreshButton="{device>/isNoTouch}" search="onSearch" tooltip="{i18n>masterSearchTooltip}" width="100%"></SearchField>
 				</contentMiddle>
 			</Bar>
-		</subHeader>-->
+		</subHeader>
 		<content>
-			<List id="list" items="{project>/ProjectComponents}" mode="SingleSelectMaster" selectionChange="onSelect" noDataText="{i18n>masterListNoDataText}" swipe="onSwipe" growing="true"
-				growingScrollToLoad="true" modeAnimationOn="false" includeItemInSelection="true">
+			<List id="list" items="{path: 'compModel>/components'}" mode="SingleSelectMaster" selectionChange="onSelect"
+				noDataText="{i18n>masterListNoDataText}" swipe="onSwipe" growing="true" growingScrollToLoad="true" modeAnimationOn="false"
+				includeItemInSelection="true">
 				<items>
-					<ObjectListItem type="Active" press="onSelect" title="{project>ProjCompTyp}"></ObjectListItem>
+					<ObjectListItem type="Active" press="onSelect" title="{compModel>comp_type}"></ObjectListItem>
 				</items>
 			</List>
 		</content>

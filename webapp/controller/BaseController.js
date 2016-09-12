@@ -2,11 +2,13 @@
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
 		"sap/ui/core/UIComponent",
-		"sap/ui/core/routing/History"
-	], function (Controller,UIComponent,History) {
+		"sap/ui/core/routing/History",
+		"QM_Dashboard/model/formatter"
+	], function (Controller,UIComponent,History,formatter) {
 		"use strict";
 
 		return Controller.extend("QM_Dashboard.controller.BaseController", {
+			formatter: formatter,
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
 			 * @public
@@ -23,7 +25,7 @@ sap.ui.define([
 			 * @returns {sap.ui.model.Model} the model instance
 			 */
 			getModel : function (sName) {
-				return this.getView().getModel(sName);
+				return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName);
 			},
 
 			/**
