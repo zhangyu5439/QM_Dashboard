@@ -8,7 +8,7 @@
 			title="{i18n>notFoundTitle}"
 			text="{i18n>notFoundText}"
 			icon="{sap-icon://document}"
-			description=""
+			description="Sorry"
 			showNavButton="{device>/system/phone}"
 			navButtonPress="onNavBack">
 	</MessagePage>

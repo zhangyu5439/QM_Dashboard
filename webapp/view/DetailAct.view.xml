@@ -1,11 +1,15 @@
 <mvc:View controllerName="QM_Dashboard.controller.DetailAct" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns:form="sap.ui.layout.form" xmlns:footerbar="sap.ushell.ui.footerbar">
+	xmlns:form="sap.ui.layout.form" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:tb="sap.ui.table">
 	<Page title="{i18n>detailPageTitle}" showNavButton="true" navButtonPress="onNavBack">
+		<headerContent>
+			<Button icon="sap-icon://home" tooltip="Back to Overview" press="onNavHome"/>
+		</headerContent>
 		<content>
 			<!--Header information supplier name, total value with currency code, change date and requester of the selected purchase order -->
-			<ObjectHeader id="objectHeader" title="{qmdModel>name}" responsive="true" intro="{qmdModel>industry} - {qmdModel>type} - {qmdModel>methodology}">
+			<ObjectHeader id="objectHeader" title="{qmdModel>name}" responsive="true" intro="{qmdModel>description}">
 				<statuses>
-					<ObjectStatus id="id1" text="{qmdModel>comp_type}"/>
+					<ObjectStatus id="id1" text="{path:'qmdModel>status',formatter:'.formatter.statusText'}"
+						state="{path:'qmdModel>status',formatter:'.formatter.stateFormat'}"/>
 				</statuses>
 			</ObjectHeader>
 			<!--Allow adding fields after the object header -->
@@ -17,11 +21,6 @@
 							<core:Fragment fragmentName="QM_Dashboard.view.GeneralForm" type="XML"/>
 						</content>
 					</IconTabFilter>
-					<IconTabFilter key="wiki" text="{i18n>iconTabWiki}" icon="sap-icon://cloud">
-						<content>
-							<core:Fragment fragmentName="QM_Dashboard.view.WikiForm" type="XML"/>
-						</content>
-					</IconTabFilter>
 					<IconTabFilter key="contact" text="{i18n>iconTabContact}" icon="sap-icon://contacts">
 						<content>
 							<core:Fragment fragmentName="QM_Dashboard.view.ContactForm" type="XML"/>
@@ -31,34 +30,36 @@
 						<content>
 							<core:Fragment fragmentName="QM_Dashboard.view.TimelineForm" type="XML"/>
 						</content>
-					</IconTabFilter>					
+					</IconTabFilter>
+					<IconTabFilter key="wiki" text="{i18n>iconTabWiki}" icon="sap-icon://cloud">
+						<content>
+							<core:Fragment fragmentName="QM_Dashboard.view.WikiForm" type="XML"/>
+						</content>
+					</IconTabFilter>
 				</items>
 			</IconTabBar>
 			<!--Filter Criteria-->
 			<form:SimpleForm title="Filter" minWidth="1024" maxContainerCols="2" class="sapUiForceWidthAuto sapUiResponsiveMargin" labelSpanL="3"
-				labelSpanM="3" columnsL="3">
-				<Label text="Phase - Sprint"/>
-				<ComboBox id='cbPhase' items="{path: 'viewProperties>/filters', sorter:{path: 'viewProperties>phase'}}">
-					<core:Item key='{viewProperties>phase}' text='{viewProperties>phase}'/>
-				</ComboBox>
-				<ComboBox id='cbProgress' items="{path: 'viewProperties>/filters', sorter:{path: 'viewProperties>progress'}}">
-					<core:Item key='{viewProperties>progress}' text='{viewProperties>progress}'/>
+				labelSpanM="3" columnsL="3" visible="{= ${detModel>/details}.length > 0}">
+				<Label text="Progress"/>
+				<ComboBox id='cbProgress' items="{path: 'tlModel>/timeline', sorter:{path: 'tlModel>item_id'}}" selectedKey="4" selectionChange="onSelChg">
+					<core:Item key='{tlModel>item_id}' text='{tlModel>phase} - {tlModel>progress}'/>
 				</ComboBox>
 				<Label text="Team"/>
-				<ComboBox id='cbTeam' items="{path: 'viewProperties>/filters', sorter:{path: 'viewProperties>team'}}">
-					<core:Item key='{viewProperties>team}' text='{viewProperties>team}'/>
+				<ComboBox id='cbTeam' items="{path: 'teamModel>/teams'}" selectedKey="0" selectionChange="onSelChg">
+					<core:Item key='{teamModel>item_id}' text='{teamModel>name}'/>
 				</ComboBox>
 			</form:SimpleForm>
 			<!--Allow adding fields after the form -->
 			<core:ExtensionPoint name="extensionAfterForm"/>
 			<!--Summary information-->
 			<Table id="tabSummary" headerText="Summary" updateFinished="onUpdateFinished1" class="sapUiResponsiveMargin" width="auto"
-				items="{path: 'detModel>/details', parameters: {select: 'phase,progress,due_date,status'}}">
+				items="{path: 'actModel>/status', parameters: {select: 'phase,progress,due_date,status,qm_status'}}" visible="{= ${actModel>/status}.length > 0}">
 				<columns>
 					<!--Current-->
 					<Column id="colBlank" vAlign="Middle" width="10%">
 						<header>
-							<Label id="colblBlank" text="" />
+							<Label id="colblBlank" text=""/>
 						</header>
 					</Column>
 					<!--Phase-->
@@ -68,65 +69,79 @@
 						</header>
 					</Column>
 					<!--Progress-->
-					<Column id="colActCat" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle" width="25%">
+					<Column id="colActCat" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle" width="15%">
 						<header>
 							<Label id="colblActTyp" text="Progress"/>
 						</header>
 					</Column>
 					<!--End Date-->
-					<Column id="colDueDate" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="25%">
+					<Column id="colDueDate" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="20%">
 						<header>
 							<Label id="colblDueDate" text="Due Date"/>
 						</header>
 					</Column>
 					<!--Status-->
-					<Column id="colStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle" >
+					<Column id="colStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle">
 						<header>
 							<Label id="colblStatus" text="Status"/>
+						</header>
+					</Column>
+					<!--QM Status-->
+					<Column id="colQmStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle">
+						<header>
+							<Label id="colblQmStatus" text="QM Evaluation"/>
 						</header>
 					</Column>
 				</columns>
 				<ColumnListItem id="cliSummary">
 					<cells>
 						<!--Current-->
-						<Text id="cellCurr" text="Current:" class="sapMTableContentMargin" />						
+						<Text id="cellCurr" text="Current:" class="sapMTableContentMargin"/>
 						<!--Phase-->
-						<Text id="cellTitle" text="{detModel>phase}" class="sapMTableContentMargin"/>
+						<Text id="cellTitle" text="{actModel>phase}" class="sapMTableContentMargin"/>
 						<!--Progress-->
-						<Text id="cellActCat" text="{detModel>progress}" class="sapMTableContentMargin"/>
+						<Text id="cellActCat" text="{actModel>progress}" class="sapMTableContentMargin"/>
 						<!--Due Date-->
-						<DatePicker id="cellDueDate" value="{path:'detModel>due_date', formatter:'.formatter.daysAgo'}" 
-						class="sapMTableContentMargin" width="80%" editable="{appProperties>/editMode}"/>
+						<DatePicker id="cellDueDate" value="{path:'actModel>due_date', formatter:'.formatter.deliveryDate'}" class="sapMTableContentMargin"
+							width="80%" editable="{appProperties>/editMode}"/>
 						<!--Status-->
-						<!--<Text id="cellStatus" text="{path:'detModel>status', formatter: '.formatter.statusText'}" class="sapMTableContentMargin"/>-->
-						<ComboBox id='cellSumStatus' items="{path: 'viewProperties>/sumStatus', sorter:{path: 'viewProperties>/sumStatus'}}" 
-						width="80%" selectedKey="{viewProperties>/sumSelStatus}" editable="{appProperties>/editMode}">
-							<core:Item key='{viewProperties>key}' text="{path:'viewProperties>key',  formatter: '.formatter.statusText'}"/>
+						<Text id="cellStatus" text="{path:'actModel>status', formatter: '.formatter.statusText'}" class="sapMTableContentMargin"/>
+						<ComboBox id='cellSumStatus' items="{path: 'viewProperties>/sumStatus', sorter:{path: 'viewProperties>/sumStatus'}}" width="80%"
+							selectedKey="{actModel>qm_status}" editable="{appProperties>/editMode}">
+							<core:Item key='{viewProperties>key}' text="{path:'viewProperties>key', formatter: '.formatter.statusText'}"/>
 						</ComboBox>
 					</cells>
 				</ColumnListItem>
 			</Table>
 			<!--Item list-->
-			<Table id="tabItems" headerText="{path:'viewProperties>/itemListCount', formatter: '.formatter.itemListTitle' }"
-				updateFinished="onUpdateFinished" class="sapUiResponsiveMargin" width="auto"
-				items="{path: 'detModel>/details', parameters: {select: 'team,due_date,status,link,wiki,comment'}}">
+			<Table id="tabItems" headerText="{path:'viewProperties>/itemListCount', formatter: '.formatter.teamListTitle' }"
+				updateFinished="onUpdateFinished" class="sapUiResponsiveMargin" width="auto" itemPress="onItemPress" 
+				visible="{= ${detModel>/details}.length > 0}" mode="MultiSelect" selectionChange="onItemPress" 
+				items="{path: 'detModel>/details', parameters: {select: 'team,due_date,status,link,wiki,comment'}}" >
 				<columns>
 					<!--Team name-->
-					<Column id="colTeam" width="10%" vAlign="Middle">
+					<Column id="colTeam" width="10%" vAlign="Top">
 						<header>
 							<Label id="colblTeam" text="Team" visible="{= !${device>/system/phone} }"/>
 						</header>
 					</Column>
 					<!--Activity Status-->
-					<Column id="colActStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle" width="15%">
+					<Column id="colActStatus" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Top" width="20%">
 						<header>
 							<Label id="colblActStatus" text="Activity Status"/>
 						</header>
 					</Column>
 					<!--Link-->
-					<Column id="colLink" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle" width="45%">
+					<Column id="colLink" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Top" width="40%"
+						visible="{appProperties>/editMode}">
 						<header>
 							<Label id="colblLink" text="Link"/>
+						</header>
+					</Column>
+					<Column id="colLink2" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" vAlign="Middle" width="30%"
+						visible="{= ${appProperties>/editMode} ? false:true}">
+						<header>
+							<Label id="colblLink2" text="Link"/>
 						</header>
 					</Column>
 					<!--Comment-->
@@ -135,38 +150,46 @@
 							<Label id="colblComment" text="Comment"/>
 						</header>
 					</Column>
-
 				</columns>
-				<ColumnListItem id="detailsListItem">
+				<ColumnListItem id="detailsListItem" type="Active">
 					<cells>
 						<!--Team name-->
 						<Text id="cellTeamName" text="{detModel>team}" class="sapMTableContentMargin"/>
 						<!--Due Date-->
-						<ComboBox id='cellActStatus' items="{path: 'viewProperties>/status', sorter:{path: 'viewProperties>/status'}}" 
-						selectedKey="{detModel>status}" width="100%" editable="{appProperties>/editMode}">
-							<core:Item key='{viewProperties>key}' text="{path:'viewProperties>key',  formatter: '.formatter.statusText'}"/>
+						<ComboBox id='cellActStatus' items="{path: 'viewProperties>/status', sorter:{path: 'viewProperties>/status'}}"
+							selectedKey="{detModel>status}" width="100%" editable="{appProperties>/editMode}" class="sapMTableContentMargin">
+							<core:Item key='{viewProperties>key}' text="{path:'viewProperties>key', formatter: '.formatter.statusText'}"/>
 						</ComboBox>
 						<!--Link-->
-						<Input id="cellLink" value="{detModel>link}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"/>
+						<Input id="cellLink" value="{detModel>link}" class="sapMTableContentMargin" editable="{appProperties>/editMode}"
+							visible="{appProperties>/editMode}"/>
+						<Link href="{detModel>link}" text="document link" class="sapMTableContentMargin"/>
 						<!--Comment-->
-						<TextArea id="cellComment" value="{detModel>comment}" class="sapMTableContentMargin" width='100%' wrapping="Soft" editable="{appProperties>/editMode}"/>
-			    	</cells>
+						<TextArea id="cellComment" value="{detModel>comment}" class="sapMTableContentMargin" width='100%' wrapping="Soft"
+							editable="{appProperties>/editMode}"/>
+					</cells>
 				</ColumnListItem>
 			</Table>
-			
-	<!--Log list-->
-			<Table id="tabHistory" headerText="History"
-				updateFinished="onUpdateFinished" class="sapUiResponsiveMargin" width="auto"
-				items="{path: 'histModel>/logs', parameters: {select: 'date,severity_info.s1,severity_info.s2,severity_info.s3'}}">
+			<!--Log list-->
+			<Table id="tabHistory" updateFinished="onUpdateFinished1" class="sapUiResponsiveMargin" width="auto" enableBusyIndicator="true"
+				items="{path: 'histModel>/logs', sorter:{path:'date',descending:'true'}, parameters: {select: 'date,severity_info.s1,severity_info.s2,severity_info.s3'}}"
+				visible="{= ${viewProperties>/itemListCount1} > 1}">
+				<headerToolbar>
+					<Toolbar>
+						<Title level="H2" text="{path:'viewProperties>/itemListCount1', formatter: '.formatter.itemListTitle' }"/>
+						<ToolbarSpacer/>
+						<Button id="btnSync" icon="sap-icon://synchronize" press="onSyncLog"/>
+					</Toolbar>
+				</headerToolbar>
 				<columns>
 					<!--Date-->
 					<Column id="colDate" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="20%">
 						<header>
 							<Label id="colblDate" text="Date"/>
 						</header>
-					</Column>			
+					</Column>
 					<!--Severity 1-->
-					<Column id="colS1" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline"  width="10%">
+					<Column id="colS1" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" width="10%">
 						<header>
 							<Label id="colblS1" text="Severity 1"/>
 						</header>
@@ -182,40 +205,37 @@
 						<header>
 							<Label id="colblS3" text="Severity 3"/>
 						</header>
-					</Column>	
+					</Column>
 				</columns>
 				<ColumnListItem id="historyListItem">
-					<cells>	
+					<cells>
 						<!--Date-->
-						<DatePicker id="cellDate" value="{path:'histModel>date',formatter:'.formatter.daysAgo'}"
-						class="sapMTableContentMargin" width="50%" editable="{appProperties>/editMode}"/>
+						<DatePicker id="cellDate" value="{path:'histModel>date',formatter:'.formatter.daysAgo'}" class="sapMTableContentMargin" width="50%"
+							editable="false"/>
 						<!--Severity 1-->
 						<Input id="cellS1" value="{histModel>severity_info.s1}" class="sapMTableContentMargin" width="40%" editable="{appProperties>/editMode}"/>
 						<!--Severity 1-->
 						<Input id="cellS2" value="{histModel>severity_info.s2}" class="sapMTableContentMargin" width="40%" editable="{appProperties>/editMode}"/>
 						<!--Severity 1-->
 						<Input id="cellS3" value="{histModel>severity_info.s3}" class="sapMTableContentMargin" width="40%" editable="{appProperties>/editMode}"/>
-					</cells>					
-					</ColumnListItem>
-			</Table>		
+					</cells>
+				</ColumnListItem>
+			</Table>
 		</content>
-		
 		<!--Footer bar with "Save" and "Edit" button and a button for opening an action sheet containing the standard "AddBookmark" button-->
 		<footer>
 			<OverflowToolbar id="footerToolbar">
 				<ToolbarSpacer id="footerToolbarSpacer"/>
-				<Button id="btnSave"  icon="sap-icon://save" tooltip="Save" press="onSaveButtonPressed" enabled="{appProperties>/editMode}"/>
-				<Button id="btnEdit"  icon="sap-icon://edit" tooltip="Edit" press="onEditButtonPressed" enabled="{= ${appProperties>/editMode} ? false:true}"/>
-				<Button id="btnCancel"  icon="sap-icon://cancel" tooltip="Cancel" press="onCancelButtonPressed" enabled="{appProperties>/editMode}"/>
-				<Button id="btnShare" icon="sap-icon://action"  tooltip="Share" press="onShareButtonPressed">
+				<Button id="approveButton" type="Accept" text="Set Overall Status OK" press="onApprovalButtonPressed" enabled="{appProperties>/editMode}"/>
+				<Button id="btnSave" icon="sap-icon://save" tooltip="Save" press="onSaveButtonPressed" enabled="{appProperties>/editMode}"/>
+				<Button id="btnEdit" icon="sap-icon://edit" tooltip="Edit" press="onEditButtonPressed" enabled="{= ${appProperties>/editMode} ? false:true}"/>
+				<Button id="btnCancel" icon="sap-icon://cancel" tooltip="Cancel" press="onCancelButtonPressed" enabled="{appProperties>/editMode}"/>
+				<Button id="btnShare" icon="sap-icon://action" tooltip="Share" press="onShareButtonPressed">
 					<dependents>
 						<ActionSheet id="asShare" showCancelButton="true" placement="Top">
 							<buttons>
 								<Button id="btnSendEmail" icon="sap-icon://email" text="Send Email" press="onSendEmailPressed"/>
-								<footerbar:AddBookmarkButton id ="btnShareTile" appData="{
-									path: 'viewProperties>/saveAsTileTitle',
-									formatter: '.formatter.appDataForTile'
-								}"/>
+								<footerbar:AddBookmarkButton id="btnShareTile" appData="{ path: 'viewProperties>/saveAsTileTitle', formatter: '.formatter.appDataForTile' }"/>
 							</buttons>
 						</ActionSheet>
 					</dependents>

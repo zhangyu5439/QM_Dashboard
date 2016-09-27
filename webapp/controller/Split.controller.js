@@ -16,6 +16,8 @@ sap.ui.define([
 				currProjectID: "",
 				selComp:{compType:"",phase:"",progress:""},
 				//selected****: [],
+				projectStatus: "D",
+				view:{pbi:"true",pbiRev:"false",hld:"true",hldRev:"false",spec:"true",specRev:"false",mMsg:"true",cMsg:"false"},
 				editMode: false,
 				emptyPageText: "",
 				busy: true

@@ -1,3 +1,3 @@
 <mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" controllerName="QM_Dashboard.controller.Split">
-	<SplitApp id="splitApp"></SplitApp>
+	<SplitApp class="qmdApp" id="splitApp"></SplitApp>
 </mvc:View>

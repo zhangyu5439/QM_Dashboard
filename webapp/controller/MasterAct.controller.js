@@ -48,7 +48,8 @@ sap.ui.define([
 					var oJsonModel = new JSONModel();
 					var sComponentPath = "/activities";
 
-					oModel.read(sComponentPath, null, ["$filter=project_id eq '" + sProjectID + "' and comp_type eq '" + sCompType + "'"], false,
+					oModel.read(sComponentPath, null, 
+					["$filter=project_id eq '" + sProjectID + "' and comp_type eq '" + sCompType + "' and phase eq '" + sPhase + "' and progress eq '" + sProgress + "'"], false,
 						function(
 							oData, oResponse) {
 							console.log("Read successfully - oData ");

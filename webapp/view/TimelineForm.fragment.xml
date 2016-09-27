@@ -23,7 +23,7 @@
 					<Label text="{i18n>qGate1}" />
 					<Text text="{path:'qmdModel>q_gate.cdp_sd2dt', formatter:'.formatter.daysAgo'}" />
 					<Label text="{i18n>qGate2}" />
-					<Text text="{path:'qmdModel>q_gate.cdp_dt2s', formatter:'.formatter.daysAgo'}" />
+					<Text text="{path:'qmdModel>q_gate.cdp_dt2s', formatter:'.formatter.deliveryDate'}" />
 				</f:content>
 			</f:SimpleForm>
 		</l:content>

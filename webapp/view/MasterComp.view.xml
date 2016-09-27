@@ -1,5 +1,8 @@
 <mvc:View controllerName="QM_Dashboard.controller.MasterComp" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
-	<Page id="page" title="{i18n>masterCompTitle}">
+	<Page id="page" title="{qmdModel>curr_phase} - {i18n>masterCompTitle}" showNavButton="true" navButtonPress="onNavBack">
+		<headerContent>
+			<Button icon="sap-icon://multi-select" tooltip="Multi-Selection"/>
+		</headerContent>
 		<subHeader>
 			<Bar id="searchBar">
 				<contentMiddle>
@@ -9,22 +12,26 @@
 		</subHeader>
 		<content>
 			<List id="list" items="{path: 'compModel>/components'}" mode="SingleSelectMaster" selectionChange="onSelect"
-				noDataText="{i18n>masterListNoDataText}" swipe="onSwipe" growing="true" growingScrollToLoad="true" modeAnimationOn="false"
-				includeItemInSelection="true">
+				noDataText="{i18n>masterListCompNoDataText}" swipe="onSwipe" growing="true" growingScrollToLoad="true" modeAnimationOn="false"
+				includeItemInSelection="true" enableBusyIndicator="true" updateFinished="onUpdateFinished">
 				<items>
-					<ObjectListItem type="Active" press="onSelect" title="{compModel>comp_type}"></ObjectListItem>
+					<ObjectListItem type="Active" press="onSelect" icon="{path:'compModel>comp_type', formatter:'.formatter.compIcon'}"
+						title="{path:'compModel>comp_type', formatter:'.formatter.compText'}">
+						<firstStatus>
+							<ObjectStatus text="{path:'compModel>status',formatter:'.formatter.statusText'}"
+								state="{path:'compModel>status',formatter:'.formatter.stateFormat'}"/>
+						</firstStatus>
+					</ObjectListItem>
 				</items>
 			</List>
 		</content>
-		<!--		<footer>
+		<footer>
 			<Bar>
 				<contentRight>
-					<Button
-						icon="sap-icon://add"
-						tooltip="{i18n>masterFooterAddButtonTooltip}"
-						press="onAddProduct" />
+					<Button icon="sap-icon://sort" tooltip="Sort" press="onSortComp"/>
+					<Button icon="sap-icon://filter" tooltip="Filter" press="onFilterComp"/>
 				</contentRight>
 			</Bar>
-		</footer>-->
+		</footer>
 	</Page>
 </mvc:View>

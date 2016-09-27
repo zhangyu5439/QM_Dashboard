@@ -23,56 +23,71 @@ sap.ui.define([
 			var oList = this.getView().byId("list");
 			var sName = oEvent.getParameter("name");
 			var oArguments = oEvent.getParameter("arguments");
-			if (oArguments.projectPath) {
-				var sProjectPath = "/projects('" + oArguments.projectPath + "')";
-				var sProjectID = oArguments.projectPath;
-				this.getModel("appProperties").setProperty("/currProjectID", sProjectID);
+			var sProjectId, sPhase, sProgress, sProjectPath;
+			if (oArguments.projectId) {
+				sProjectId = oArguments.projectId;
+				sPhase = oArguments.phase;
+				sProgress = oArguments.progress;
 
-				//	var oModel = this.getModel("qmdModel");
-				var oModel = new sap.ui.model.odata.ODataModel("/destinations/qmd/", false);
-				var oJsonModel = new JSONModel();
-				var sComponentPath = "/components?$filter=project_id eq '" + oArguments.projectPath + "'";
-				oModel.read(sComponentPath, null, null, false, function(
-					oData, oResponse) {
-					console.log("Read successfully - oData ");
-					oJsonModel.setData({
-						components: oData.results
-					});
+				if (sProjectId) {
+					this.getModel("appProperties").setProperty("/currProjectID", sProjectId);
+					this.getModel("appProperties").setProperty("/selComp/phase", sPhase);
+					this.getModel("appProperties").setProperty("/selComp/progress", sProgress);
+				}
+			} else {
 
-				}, function() {
-					console.log("Read failed");
+				sProjectId = this.getModel("appProperties").getProperty("/currProjectID");
+				sPhase = this.getModel("appProperties").getProperty("/selComp/phase");
+				sProgress = this.getModel("appProperties").getProperty("/selComp/progress");
+
+			}
+			sProjectPath = "/projects('" + sProjectId + "')";
+			//	var oModel = this.getModel("qmdModel");
+			var oModel = new sap.ui.model.odata.ODataModel("/destinations/qmd/", false);
+			var oJsonModel = new JSONModel();
+			var sComponentPath = "/components?$filter=project_id eq '" + sProjectId + "' and phase eq '" + sPhase + "' and progress eq '" +
+				sProgress + "'";
+			oModel.read(sComponentPath, null, null, false, function(
+				oData, oResponse) {
+				console.log("Read successfully - oData ");
+				oJsonModel.setData({
+					components: oData.results
 				});
 
-				this.getView().setModel(oJsonModel, "compModel");
+			}, function() {
+				console.log("Read failed");
+			});
 
-				/*			this.getView().bindElement({
-								path: sProjectPath,
-								model: "my_components"
-							});*/
+			this.getView().setModel(oJsonModel, "compModel");
 
-				// Wait for the list to be loaded once
-				jQuery.when(this.oUpdateFinishedDeferred).then(jQuery.proxy(function() {
-					var aItems;
+			this.getView().bindElement({
+				path: sProjectPath,
+				model: "qmdModel"
+			});
 
-					/*				// On the empty hash select the first item
-									if (sName === "component") {
-										this.selectDetail();
-									}*/
+			// Wait for the list to be loaded once
+			jQuery.when(this.oUpdateFinishedDeferred).then(jQuery.proxy(function() {
+				//var aItems;
 
-					/*				// Try to select the item in the list
-									if (sName === "activity") {
+				// On the empty hash select the first item
+				if (sName === "split") {
+					this.showDetail();
+				}
 
-										aItems = oList.getItems();
-										for (var i = 0; i < aItems.length; i++) {
-											if (aItems[i].getBindingContext("project").getPath() === "/" + oArguments.projectPath) {
-												oList.setSelectedItem(aItems[i], true);
-												break;
-											}
+				/*				// Try to select the item in the list
+								if (sName === "activity") {
+
+									aItems = oList.getItems();
+									for (var i = 0; i < aItems.length; i++) {
+										if (aItems[i].getBindingContext("project").getPath() === "/" + oArguments.projectPath) {
+											oList.setSelectedItem(aItems[i], true);
+											break;
 										}
-									}*/
+									}
+								}*/
 
-				}, this));
-			}
+			}, this));
+
 		},
 
 		_filterComponent: function(sProjectID) {
@@ -120,10 +135,10 @@ sap.ui.define([
 			// Get the list item, either from the listItem parameter or from the event's
 			// source itself (will depend on the device-dependent mode).
 			var oListItem = oEvent.getParameter("listItem");
-			this.showDetail(oListItem || oEvent.getSource());
+			this.showActList(oListItem || oEvent.getSource());
 		},
 
-		showDetail: function(oItem) {
+		showActList: function(oItem) {
 			// If we're on a phone, include nav in history; if not, don't.
 			//	var bReplace = jQuery.device.is.phone ? false : true;
 			var oContext = oItem.getBindingContext("compModel");
@@ -133,6 +148,13 @@ sap.ui.define([
 				phase: oContext.getProperty("phase"),
 				progress: oContext.getProperty("progress")
 			});
+		},
+
+		showDetail: function(oItem) {
+			// If we're on a phone, include nav in history; if not, don't.
+			//	var bReplace = jQuery.device.is.phone ? false : true;
+			//var oContext = oItem.getBindingContext("actModel");
+		//	sap.ui.core.UIComponent.getRouterFor(this).navTo("projDetail");
 		}
 
 	});

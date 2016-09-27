@@ -29,23 +29,160 @@ sap.ui.define([
 			return fnDateAgoFormatter.format(dDate);
 		},
 
- 		statusText: function(sStatus) {
- 			//var resourceBundle = this.getView().getModel("i18n").getResourceBundle();
- 			switch (sStatus) {
- 				case "I":
- 					return fnGetBundle(this).getText("projectStatusI");
- 				case "S":
- 					return fnGetBundle(this).getText("projectStatusS");
- 				case "N":
- 					return fnGetBundle(this).getText("projectStatusN");
-   				case "P":
- 					return fnGetBundle(this).getText("projectStatusP");
-  				case "D":
- 					return fnGetBundle(this).getText("projectStatusD");
- 				default:
- 					return sStatus;
- 			}
- 		},
+		progressColor: function(iDays) {
+			var sColor = "Good";
+
+			if (iDays <= 3) {
+				sColor = "Error";
+			} else if (iDays <= 7) {
+				sColor = "Critical";
+			}
+			return sColor;
+		},
+
+		tcColor: function(iCoverage) {
+			var sColor = "Critical";
+
+			if (iCoverage >= 90) {
+				sColor = "Good";
+			} else if (iCoverage <= 50) {
+				sColor = "Error";
+			}
+			return sColor;
+		},
+
+		sizeText: function(sSize) {
+
+			switch (sSize) {
+				case "M":
+					return "Medium";
+				case "L":
+					return "Large";
+				case "S":
+					return "Small";
+				case "XL":
+					return "X Large";
+				case "XXL":
+					return "XX Large";
+				case "XXXL":
+					return "XXX Large";
+				default:
+					return "";
+			}
+		},
+
+		stateFormat: function(sStatus) {
+
+			switch (sStatus) {
+				case "I":
+					return "Warning";
+				case "D":
+					return "Success";
+				case "E":
+					return "Error";
+				case "P":
+					return "Warning";
+				default:
+					return "None";
+			}
+		},
+
+		mandatoryText: function(sFlag) {
+
+			switch (sFlag) {
+				case "X":
+					return "Mandatory";
+				case "":
+					return "Optional";
+				default:
+					return "Optional";
+			}
+		},
+
+		compText: function(sComp) {
+
+			switch (sComp) {
+				case "CDQ":
+					return "Code Quality";
+				case "DOC":
+					return "Documentation";
+				case "REV":
+					return "Review";
+				case "TEST":
+					return "Testing";
+				case "PERF":
+					return "Performance";
+				case "SOXIP":
+					return "SOX/IP";
+				default:
+					return "";
+			}
+		},
+
+		compIcon: function(sComp) {
+
+			switch (sComp) {
+				case "CDQ":
+					return "sap-icon://quality-issue";
+				case "DOC":
+					return "sap-icon://documents";
+				case "REV":
+					return "sap-icon://inspection";
+				case "TEST":
+					return "sap-icon://lab";
+				case "PERF":
+					return "sap-icon://performance";
+				case "SOXIP":
+					return "sap-icon://permission";
+				default:
+					return "";
+			}
+		},
+
+		actText: function(sAct) {
+
+			switch (sAct) {
+				case "ATC":
+					return "ABAP Test Cockpit (ATC)";
+				case "CI":
+					return "Code Inspector";
+				case "CDREV":
+					return "Code Review";
+				case "HLD":
+					return "High Level Design";
+				case "PBI":
+					return "PBI";
+				case "PREV":
+					return "PBI Review";
+				case "TCREV":
+					return "Test Case Review";
+				case "CT":
+					return "Customer Case Testing";
+				case "FIT":
+					return "Internal Case Testing";
+				default:
+					return "";
+			}
+		},
+		statusText: function(sStatus) {
+			//var resourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			switch (sStatus) {
+				case "E":
+					return fnGetBundle(this).getText("projectStatusE");
+				case "I":
+					return fnGetBundle(this).getText("projectStatusI");
+				case "S":
+					return fnGetBundle(this).getText("projectStatusS");
+				case "N":
+					return fnGetBundle(this).getText("projectStatusN");
+				case "P":
+					return fnGetBundle(this).getText("projectStatusP");
+				case "D":
+					return fnGetBundle(this).getText("projectStatusD");
+				default:
+					return sStatus;
+			}
+		},
 
 		amountWithCurrency: function(fAmount, sCurrency) {
 			if (!fAmount || !sCurrency) {
@@ -118,10 +255,18 @@ sap.ui.define([
 			]);
 		},
 
+		teamListTitle: function(iCount) {
+			return (iCount === 0) ? fnGetBundle(this).getText("xtit.teamListTitleWithoutCount") : fnGetBundle(this).getText(
+				"xtit.teamListTitle", [
+					iCount
+				]);
+		},
+
 		itemListTitle: function(iCount) {
-			return (iCount === 0) ? fnGetBundle(this).getText("xtit.itemListTitleWithoutCount") : fnGetBundle(this).getText("xtit.itemListTitle", [
-				iCount
-			]);
+			return (iCount === 0) ? fnGetBundle(this).getText("xtit.itemListTitleWithoutCount") : fnGetBundle(this).getText(
+				"xtit.itemListTitle", [
+					iCount
+				]);
 		},
 
 		approvalTitle: function(aPurchaseOrders, bApprove) {
@@ -135,7 +280,8 @@ sap.ui.define([
 
 		approvalText: function(aPurchaseOrders, bApprove) {
 			if (aPurchaseOrders.length === 1) {
-				return fnGetBundle(this).getText(bApprove ? "xfld.approvalTextWithSupplier" : "xfld.rejectionTextWithSupplier", [aPurchaseOrders[0].SupplierName]);
+				return fnGetBundle(this).getText(bApprove ? "xfld.approvalTextWithSupplier" : "xfld.rejectionTextWithSupplier", [aPurchaseOrders[
+					0].SupplierName]);
 			} else {
 				return fnGetBundle(this).getText(bApprove ? "xfld.approvalTextDifferentSuppliers" : "xfld.rejectionTextDifferentSuppliers");
 			}

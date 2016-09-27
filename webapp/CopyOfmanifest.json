@@ -88,7 +88,7 @@
 				"view": "ProjectOverview",
 				"targetControl": "indexApp"
 			}, {
-				"pattern": "",
+				"pattern": "split",
 				"name": "split",
 				"view": "Split",
 				"targetControl": "indexApp",
@@ -112,6 +112,12 @@
 							"viewLevel": 3,
 							"targetAggregation": "detailPages"
 						}]
+					}, {
+						"pattern": "",
+						"name": "projDetail",
+						"view": "NotFound",
+						"viewLevel": 2,
+						"targetAggregation": "detailPages"
 					}]
 				}]
 			}, {

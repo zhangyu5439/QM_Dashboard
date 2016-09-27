@@ -20,10 +20,16 @@
 				columnsL="1"
 				columnsM="1">
 				<f:content>
-					<Label text="{i18n>projectType}" />
+					<Label text="Module" />
+					<Text  text="{qmdModel>industry}" />
+					<Label text="Project Type" />
 					<Text  text="{qmdModel>type}" />
-					<Label text="{i18n>methodology}" />
-					<Text text="{qmdModel>methodology}" />
+					<Label text="Methodology" />
+					<Text  text="{qmdModel>methodology}" />					
+					<Label text="Project Size" />
+					<Text  text="{path:'qmdModel>size',formatter:'.formatter.sizeText'}" />
+					<Label text="Project Region" />
+					<Text text="{qmdModel>region}" />
 				</f:content>
 			</f:SimpleForm>
 		</l:content>

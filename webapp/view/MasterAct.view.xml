@@ -1,5 +1,6 @@
 <mvc:View controllerName="QM_Dashboard.controller.MasterAct" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
-	<Page id="page" title="{i18n>masterActTitle}" showNavButton="true" navButtonPress="onNavBack">
+	<Page id="page" title="{path:'actModel>/activities/0/comp_type',formatter:'.formatter.compText'} - {i18n>masterActTitle}"
+		showNavButton="true" navButtonPress="onNavBack">
 		<!--		<subHeader>
 			<Bar id="searchBar">
 				<contentMiddle>
@@ -14,23 +15,32 @@
 			</Bar>
 		</subHeader>-->
 		<content>
-			<List id="list" items="{actModel>/activities}" mode="SingleSelectMaster" selectionChange="onSelect" noDataText="{i18n>masterListNoDataText}" swipe="onSwipe" growing="true"
-				growingScrollToLoad="true" modeAnimationOn="false" includeItemInSelection="true">
+			<List id="list" items="{actModel>/activities}" mode="SingleSelectMaster" selectionChange="onSelect"
+				noDataText="{i18n>masterListActNoDataText}" swipe="onSwipe" growing="true" growingScrollToLoad="true" modeAnimationOn="true"
+				includeItemInSelection="true" enableBusyIndicator="true">
 				<items>
-					<ObjectListItem type="Active" press="onSelect" title="{actModel>act_type}"></ObjectListItem>
+					<ObjectListItem type="Active" press="onSelect" title="{path:'actModel>act_type',formatter:'.formatter.actText'}">
+						<attributes>
+							<ObjectAttribute text="{path:'actModel>mandatory',formatter:'.formatter.mandatoryText'}"/>
+						</attributes>
+						<firstStatus>
+							<ObjectStatus text="{path:'actModel>qm_status',formatter:'.formatter.statusText'}"
+								state="{path:'actModel>qm_status',formatter:'.formatter.stateFormat'}"/>
+						</firstStatus>
+					</ObjectListItem>
 				</items>
 			</List>
 		</content>
 		<footer>
-<!--			<OverflowToolbar id="footerToolbar">
+			<!--			<OverflowToolbar id="footerToolbar">
 				<ToolbarSpacer id="footerToolbarSpacer"/>
 				<Button id="processButton"
 					visible="{= ${viewProperties>/isMultiSelect} &amp;&amp; ${device>/system/phone}}"
 					enabled="{= ${appProperties>/selectedPurchaseOrders}.length > 0}"
 					type="Emphasized" text="{i18n>xbut.process}" press="onProcessPressed" />
-			</OverflowToolbar>	-->	
+			</OverflowToolbar>	-->
 			<Bar>
-<!--				<contentRight>
+				<!--				<contentRight>
 					<Button
 						icon="sap-icon://add"
 						tooltip="{i18n>masterFooterAddButtonTooltip}"

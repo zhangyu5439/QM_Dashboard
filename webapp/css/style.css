@@ -1,4 +1,7 @@
 /* Enter your custom styles here */
-.qmdbApp.myCustomText {
+.qmdApp.myCustomText {
   font-weight: bold;
+}
+.qmdApp.vsdSetting {
+	margin-bottom: 1rem;
 }

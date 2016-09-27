@@ -1,8 +1,8 @@
 <mvc:View controllerName="QM_Dashboard.controller.ProjectList" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
 	xmlns:mchart="sap.suite.ui.microchart" xmlns:suite="sap.suite.ui.commons">
-	<ObjectHeader id="ohOverview" responsive="true" binding="{qmdModel>/projects('0000000001')}"
-		intro="{qmdModel>industry} - {qmdModel>type} - {qmdModel>methodology}" title="{qmdModel>name}" showMarkers="false" markFlagged="true"
-		markFavorite="false" backgroundDesign="Translucent">
+	<ObjectHeader id="ohOverview" responsive="true" intro="{qmdModel>industry} - {qmdModel>type} - {qmdModel>methodology}"
+		title="{qmdModel>name}" showMarkers="false" markFlagged="true" markFavorite="false" backgroundDesign="Translucent"
+		busy="{viewProperties>/busy}">
 		<!--		<attributes>
 			<ObjectAttribute title="" text=""/>
 		</attributes>-->
@@ -17,25 +17,45 @@
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:DeltaMicroChart size="S" value1="28" value2="20" title1="May 14" title2="Apr 2014" displayValue1="28 Day" displayValue2="20 Day"
-										deltaDisplayValue="8 Day" color="Good"/>
+									<suite:DeltaMicroChart size="S" value1="{qmdModel>phase_days}" value2="{qmdModel>passed_days}"
+										title1="{path:'qmdModel>phase_from', formatter:'.formatter.daysAgo'}" title2="{path:'qmdModel>phase_to', formatter:'.formatter.daysAgo'}"
+										displayValue1="{qmdModel>phase_days} Day" displayValue2="{qmdModel>passed_days} Day"
+										deltaDisplayValue="{= ${qmdModel>phase_days} - ${qmdModel>passed_days}} Day"
+										color="{= ${qmdModel>phase_days} - ${qmdModel>passed_days} >= 7 ? 'Good':'Critical'}"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
 						<suite:south>
 							<suite:HeaderCellItem height="10%">
 								<suite:content>
-									<Label text="{qmdModel>curr_phase} - {qmdModel>curr_progress}"/>
+									<Label text="{qmdModel>curr_phase} {= ${qmdModel>curr_progress} === '' ? '':' - '}{qmdModel>curr_progress}"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--PBI-->
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/pbi}">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" value="{qmdModel>pbi}" icon="sap-icon://document"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="PBI"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:south>
 					</suite:HeaderCell>
 					<!--PBI Review-->
-					<suite:HeaderCell height="auto">
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/pbiRev}">
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" value="3" icon="sap-icon://inspection"/>
+									<suite:NumericContent size="S" value="{qmdModel>pbiRev}" icon="sap-icon://document"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
@@ -48,11 +68,11 @@
 						</suite:south>
 					</suite:HeaderCell>
 					<!--HLD-->
-					<suite:HeaderCell height="auto">
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/hld}">
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" value="9" icon="sap-icon://document"/>
+									<suite:NumericContent size="S" value="{qmdModel>hld}" icon="sap-icon://document"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
@@ -64,12 +84,29 @@
 							</suite:HeaderCellItem>
 						</suite:south>
 					</suite:HeaderCell>
-					<!--Code Review-->
-					<suite:HeaderCell height="auto">
+					<!--HLD Review-->
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/hldRev}">
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" value="7" icon="sap-icon://attachment-html"/>
+									<suite:NumericContent size="S" value="{qmdModel>hldRev}" icon="sap-icon://document"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="HLD Review"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--Code Review-->
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/cdRev}">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" value="{qmdModel>cdrev}" icon="sap-icon://attachment-html"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
@@ -81,6 +118,32 @@
 							</suite:HeaderCellItem>
 						</suite:south>
 					</suite:HeaderCell>
+					<!--Test Case Coverage-->
+					<suite:HeaderCell height="auto">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:BulletChart size="S" scale="%" targetValue="100" minValue="0" maxValue="100">
+										<suite:actual>
+											<suite:BulletChartData value="{qmdModel>test_cover}" color="{path:'qmdModel>test_cover',formatter:'.formatter.tcColor'}"/>
+										</suite:actual>
+										<suite:thresholds>
+											<suite:BulletChartData value="50" color="Error"/>
+											<suite:BulletChartData value="60" color="Critical"/>
+											<suite:BulletChartData value="90" color="Good"/>
+										</suite:thresholds>
+									</suite:BulletChart>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="Test Case Coverage"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
 					<!--ATC Check-->
 					<suite:HeaderCell height="auto">
 						<suite:north>
@@ -88,9 +151,9 @@
 								<suite:content>
 									<suite:ComparisonChart size="S">
 										<suite:data>
-											<suite:ComparisonData title="P1" value="10" color="Error"/>
-											<suite:ComparisonData title="P2" value="20" color="Critical"/>
-											<suite:ComparisonData title="P3" value="30" color="Good"/>
+											<suite:ComparisonData title="P1" value="{qmdModel>atc_p1}" color="Error"/>
+											<suite:ComparisonData title="P2" value="{qmdModel>atc_p2}" color="Critical"/>
+											<suite:ComparisonData title="P3" value="{qmdModel>atc_p3}" color="Good"/>
 										</suite:data>
 									</suite:ComparisonChart>
 								</suite:content>
@@ -109,7 +172,8 @@
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" scale="PC" value="18" valueColor="Error" indicator="Up"/>
+									<suite:NumericContent size="S" scale="" value="{qmdModel>atc_curr}" valueColor="{= ${qmdModel>atc_curr} > 0 ? 'Error':'Good'}"
+										indicator="{= ${qmdModel>atc_curr} > 0 ? 'Up':'Down'}"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
@@ -122,15 +186,15 @@
 						</suite:south>
 					</suite:HeaderCell>
 					<!--Message-->
-					<suite:HeaderCell height="auto">
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/mMsg}">
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
 									<suite:ComparisonChart size="S">
 										<suite:data>
-											<suite:ComparisonData title="High" value="3" color="Error"/>
-											<suite:ComparisonData title="Medium" value="10" color="Critical"/>
-											<suite:ComparisonData title="Low" value="8" color="Good"/>
+											<suite:ComparisonData title="High" value="{qmdModel>msg_h}" color="Error"/>
+											<suite:ComparisonData title="Medium" value="{qmdModel>msg_m}" color="Critical"/>
+											<suite:ComparisonData title="Low" value="{qmdModel>msg_l}" color="Good"/>
 										</suite:data>
 									</suite:ComparisonChart>
 								</suite:content>
@@ -139,50 +203,66 @@
 						<suite:south>
 							<suite:HeaderCellItem height="10%">
 								<suite:content>
-									<Label text="FIT Messages"/>
+									<Label text="MIT Messages"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:south>
 					</suite:HeaderCell>
 					<!--Message, Current-->
-					<suite:HeaderCell height="auto">
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/mMsg}">
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" scale="PC" value="4" valueColor="Good" indicator="Down"/>
+									<suite:NumericContent size="S" scale="" value="{qmdModel>msg_curr}" valueColor="{= ${qmdModel>msg_curr} > 0 ? 'Error':'Good'}"
+										indicator="{= ${qmdModel>msg_curr} > 0 ? 'Up':'Down'}"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
 						<suite:south>
 							<suite:HeaderCellItem height="10%">
 								<suite:content>
-									<Label text="FIT Messages, Current"/>
+									<Label text="MIT Messages, Current"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:south>
 					</suite:HeaderCell>
-					<!--Test Coverage-->
-					<suite:HeaderCell height="auto">
+					<!--Customer Message-->
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/cMsg}">
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:BulletChart size="S" scale="%" targetValue="100" minValue="0" maxValue="100">
-										<suite:actual>
-											<suite:BulletChartData value="75" color="Critical"/>
-										</suite:actual>
-										<suite:thresholds>
-											<suite:BulletChartData value="50" color="Error"/>
-											<suite:BulletChartData value="60" color="Critical"/>
-											<suite:BulletChartData value="90" color="Good"/>
-										</suite:thresholds>
-									</suite:BulletChart>
+									<suite:ComparisonChart size="S">
+										<suite:data>
+											<suite:ComparisonData title="High" value="{qmdModel>cmsg_h}" color="Error"/>
+											<suite:ComparisonData title="Medium" value="{qmdModel>cmsg_m}" color="Critical"/>
+											<suite:ComparisonData title="Low" value="{qmdModel>cmsg_l}" color="Good"/>
+										</suite:data>
+									</suite:ComparisonChart>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
 						<suite:south>
 							<suite:HeaderCellItem height="10%">
 								<suite:content>
-									<Label text="Test Coverage"/>
+									<Label text="Customer Messages"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:south>
+					</suite:HeaderCell>
+					<!--Customer Message, Current-->
+					<suite:HeaderCell height="auto" visible="{indexProperties>/mChart/cMsg}">
+						<suite:north>
+							<suite:HeaderCellItem height="90%">
+								<suite:content>
+									<suite:NumericContent size="S" scale="" value="{qmdModel>cmsg_curr}" valueColor="{= ${qmdModel>cmsg_curr} > 0 ? 'Error':'Good'}"
+										indicator="{= ${qmdModel>cmsg_curr} > 0 ? 'Up':'Down'}"/>
+								</suite:content>
+							</suite:HeaderCellItem>
+						</suite:north>
+						<suite:south>
+							<suite:HeaderCellItem height="10%">
+								<suite:content>
+									<Label text="Custoemr Messages, Current"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:south>
@@ -193,7 +273,7 @@
 	</ObjectHeader>
 	<!--Project Lists-->
 	<List id="projectList" headerText="{i18n>projectListTitle}" class="sapUiResponsiveMargin" width="auto"
-		items="{path:'qmdModel>/projects', sorter : { path : 'industry', group : true }}">
+		items="{path:'qmdModel>/projects', sorter : { path : 'industry', group : true }}" mode="SingleSelectLeft" select="onSelect">
 		<headerToolbar>
 			<Toolbar>
 				<Title text="{i18n>projectListTitle}"/>
@@ -202,13 +282,18 @@
 			</Toolbar>
 		</headerToolbar>
 		<items>
-			<ObjectListItem title="{qmdModel>name}" type="Navigation" press="onPress">
+			<ObjectListItem id="listItem" title="{qmdModel>name}" intro="" type="Navigation" press="onPress">
 				<attributes>
 					<ObjectAttribute text="{qmdModel>type} - {qmdModel>methodology}"/>
+					<ObjectAttribute text="{qmdModel>description}"/>
 				</attributes>
 				<firstStatus>
-					<ObjectStatus text="{qmdModel>curr_progress}"/>
+					<ObjectStatus text="{qmdModel>curr_phase}{= ${qmdModel>curr_progress} === '' ? '':' - '}{qmdModel>curr_progress}"/>
 				</firstStatus>
+				<secondStatus>
+					<ObjectStatus text="{path:'qmdModel>status',formatter:'.formatter.statusText'}"
+						state="{path:'qmdModel>status',formatter:'.formatter.stateFormat'}"/>
+				</secondStatus>
 			</ObjectListItem>
 		</items>
 	</List>

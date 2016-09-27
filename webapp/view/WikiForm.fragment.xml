@@ -21,9 +21,9 @@
 				columnsM="1">
 				<f:content>
 					<Label text="{i18n>wikiLink}" />
-					<Link href="{detModel>wiki}" text="Wiki Link" />
+					<Link href="{actModel>/status/0/wiki}" text="wiki link" />
 					<Label text="{i18n>actExplaination}" />
-					<Text text="{detModel>explaination}" />
+					<Text text="{actModel>/status/0/description}" />
 				</f:content>
 			</f:SimpleForm>
 		</l:content>

@@ -29,7 +29,7 @@
 					fiori2: {
 						componentData: {
 							config: {
-								search: "hidden"
+								search: "hidden",
 							}
 						}
 					}
@@ -41,11 +41,12 @@
 					url: "./",
 					description: "Demo for QM Dashboard",
 					title: "QM Dashboard"
+					//icon: "sap-icon://filter"
 					},
 					"QMDashboard-Admin": {
-					additionalInformation: "SAPUI5.Component=QM_Dashboard",
+					additionalInformation: "SAPUI5.Component=QM_Admin",
 					applicationType: "URL",
-					url: "./",
+					url: "../QM_Admin/webapp",
 					description: "Demo for QM Dashboard Administration",
 					title: "QM Admin"
 					},
@@ -68,7 +69,7 @@
 			data-sap-ui-theme="sap_bluecrystal"
 			data-sap-ui-compatVersion="edge"
 			data-sap-ui-preload="async" 
-			data-sap-ui-resourceroots='{"QM_Dashboard": "./"}'
+			data-sap-ui-resourceroots='{"QM_Dashboard": "./","QM_Admin":"../QM_Admin/"}'
 			data-sap-ui-frameOptions='allow'>// NON-SECURE setting for testing environment
 		</script>
 

@@ -1,0 +1,71 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ViewSettingsDialog title="Settings" confirm="handleConfirm">
+		<sortItems>
+			<ViewSettingsItem text="Priority" key="Pri"/>
+		</sortItems>
+		<groupItems>
+			<ViewSettingsItem text="SAP Module" key="module" selected="true" />
+			<ViewSettingsItem text="Methodology" key="meth" />
+			<ViewSettingsItem text="Project Type" key="type" />
+		</groupItems>
+		<filterItems>
+			<ViewSettingsFilterItem text="Document" key='doc' selected="true">
+				<items>
+					<ViewSettingsItem text="PBI" key="docPbi" selected="{indexProperties>/mChart/pbi}"/>
+					<ViewSettingsItem text="Specification" key="docSpec" selected="false"/>
+					<ViewSettingsItem text="HLD" key="docHld" selected="{indexProperties>/mChart/hld}"/>
+					<ViewSettingsItem text="Documentation" key="docDoc" selected="true"/>
+				</items>
+			</ViewSettingsFilterItem>
+			<ViewSettingsFilterItem text="Document Review" key='docRev'>
+				<items>
+					<ViewSettingsItem text="PBI Review" key="docPbiRev" selected="{indexProperties>/mChart/pbiRev}"/>
+					<ViewSettingsItem text="Specification Review" key="docSpecRev" selected="false"/>
+					<ViewSettingsItem text="Hld Review" key="docHldRev" selected="{indexProperties>/mChart/hldRev}"/>
+				</items>
+			</ViewSettingsFilterItem>
+			<ViewSettingsFilterItem text="Code Quality" key='cdq'>
+				<items>
+					<ViewSettingsItem text="Code Review" key="cdqRev" selected="true"/>
+					<ViewSettingsItem text="ATC" key="docATC" selected="true"/>
+					<ViewSettingsItem text="Code Inspector" key="docCI" selected="false"/>
+				</items>
+			</ViewSettingsFilterItem>
+			<ViewSettingsFilterItem text="Testing" key='test'>
+				<items>
+					<ViewSettingsItem text="Unit Test" key="testUt" selected="true"/>
+					<ViewSettingsItem text="Test Case Coverage" key="testTC" selected="true"/>
+					<ViewSettingsItem text="MIT" key="testMIT" selected="{indexProperties>/mChart/mMsg}"/>
+					<ViewSettingsItem text="CAT" key="testCAT" selected="{indexProperties>/mChart/cMsg}"/>
+					<ViewSettingsItem text="Performance" key="testPerf" selected="false"/>
+				</items>
+			</ViewSettingsFilterItem>
+		</filterItems>
+		<customTabs>
+			<ViewSettingsCustomTab id="mc-settings" icon="sap-icon://action-settings" title="Settings">
+				<content>
+					<List headerText="" rememberSelections="true">
+						<InputListItem id="itemSwitch" label="Microcharts">
+							<Switch state="true"/>
+						</InputListItem>
+					</List>
+					<Panel height="338px">
+						<content>
+							<Label text="Theme" design="Bold" id="VSDThemeLabel"/>
+							<SegmentedButton class="sapUiSmallMarginBottom" selectedButton="VSDsap_bluecrystal" id="VSDThemeButtons" width="100%" >
+								<Button text="High Contrast Black" id="VSDsap_hcb"/>
+								<Button text="Blue Crystal" id="VSDsap_bluecrystal"/>
+							</SegmentedButton>
+							<Label text="    " />
+							<Label text="Compact Content Density" design="Bold"/>
+							<SegmentedButton class="sapUiSmallMarginBottom" selectedButton="VSDcompactOn" id="VSDCompactModeButtons" width="100%">
+								<Button text="On" id="VSDcompactOn"/>
+								<Button text="Off" id="VSDcompactOff"/>
+							</SegmentedButton>
+						</content>
+					</Panel>
+				</content>
+			</ViewSettingsCustomTab>
+		</customTabs>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
