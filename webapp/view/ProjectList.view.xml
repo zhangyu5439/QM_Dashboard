@@ -55,7 +55,7 @@
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" value="{qmdModel>pbiRev}" icon="sap-icon://document"/>
+									<suite:NumericContent size="S" value="{qmdModel>pbirev}" icon="sap-icon://document"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>
@@ -89,7 +89,7 @@
 						<suite:north>
 							<suite:HeaderCellItem height="90%">
 								<suite:content>
-									<suite:NumericContent size="S" value="{qmdModel>hldRev}" icon="sap-icon://document"/>
+									<suite:NumericContent size="S" value="{qmdModel>hldrev}" icon="sap-icon://document"/>
 								</suite:content>
 							</suite:HeaderCellItem>
 						</suite:north>

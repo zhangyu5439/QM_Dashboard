@@ -21,7 +21,7 @@
 				<items>
 					<ViewSettingsItem text="PBI Review" key="docPbiRev" selected="{indexProperties>/mChart/pbiRev}"/>
 					<ViewSettingsItem text="Specification Review" key="docSpecRev" selected="false"/>
-					<ViewSettingsItem text="Hld Review" key="docHldRev" selected="{indexProperties>/mChart/hldRev}"/>
+					<ViewSettingsItem text="HLD Review" key="docHldRev" selected="{indexProperties>/mChart/hldRev}"/>
 				</items>
 			</ViewSettingsFilterItem>
 			<ViewSettingsFilterItem text="Code Quality" key='cdq'>
